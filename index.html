@@ -2,16 +2,17 @@
 <html lang="uz" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ultra Anki Pro - 2025</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ultra Smart Anki 2025</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Konfiguratsiya -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -19,1040 +20,684 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        ios: { blue: '#007AFF', green: '#34C759', red: '#FF3B30', orange: '#FF9500' },
-                        dark: { bg: '#000000', surface: '#1C1C1E', surface2: '#2C2C2E', border: '#38383A' }
+                        brand: { 
+                            dark: '#050505', 
+                            card: '#121212', 
+                            border: '#2A2A2A', 
+                            blue: '#2997FF', 
+                            success: '#30D158',
+                            warning: '#FF9F0A',
+                            danger: '#FF453A'
+                        }
                     },
-                    boxShadow: { 'glow': '0 0 20px rgba(0, 122, 255, 0.4)', 'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.3)' }
+                    animation: {
+                        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'scale-in': 'scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both'
+                    },
+                    keyframes: {
+                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: 0 }, '100%': { transform: 'translateY(0)', opacity: 1 } },
+                        scaleIn: { '0%': { transform: 'scale(0.95)', opacity: 0 }, '100%': { transform: 'scale(1)', opacity: 1 } },
+                        shake: { '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' }, '20%, 80%': { transform: 'translate3d(2px, 0, 0)' }, '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' }, '40%, 60%': { transform: 'translate3d(4px, 0, 0)' } }
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        * { -webkit-tap-highlight-color: transparent; }
-        body { 
-            -webkit-font-smoothing: antialiased; 
-            -moz-osx-font-smoothing: grayscale; 
-            background-color: #000; 
-            color: #fff; 
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-        }
+        /* Asosiy CSS */
+        body { background-color: #000; color: #fff; -webkit-tap-highlight-color: transparent; overflow: hidden; }
         
-        .glass { 
-            background: rgba(28, 28, 30, 0.65); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-        }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #38383A; border-radius: 10px; }
+        /* Glassmorphism */
+        .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.08); }
+        .glass-card { background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes pulse-glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-        @keyframes flip { 
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(180deg); }
-        }
-        
-        .animate-enter { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-slide { animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-up { animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-flip { animation: flip 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; }
-        
-        .perspective-1000 { perspective: 1000px; }
-        .preserve-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
+        /* 3D Flip Card Effect */
+        .perspective-container { perspective: 1000px; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); transform-style: preserve-3d; }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 1.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; }
+        .flip-card-back { transform: rotateY(180deg); background: #1C1C1E; }
+        .flip-card-front { background: #1C1C1E; }
+        .flipped { transform: rotateY(180deg); }
 
-        .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-        
-        .cloze-answer { 
-            color: #007AFF; 
-            font-weight: 700; 
-            background: rgba(0, 122, 255, 0.15); 
-            padding: 2px 6px; 
-            border-radius: 4px;
-            border-bottom: 2px dashed #007AFF;
-        }
-        
-        .heatmap-grid { display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: 3px; }
-        .heatmap-cell { width: 12px; height: 12px; border-radius: 2px; background-color: #2C2C2E; }
-        .heatmap-cell[data-level="1"] { background-color: #0d47a1; }
-        .heatmap-cell[data-level="2"] { background-color: #1565c0; }
-        .heatmap-cell[data-level="3"] { background-color: #1976d2; }
-        .heatmap-cell[data-level="4"] { background-color: #42a5f5; }
+        /* Cloze Style */
+        .cloze-hidden { background: #2997FF; color: transparent; border-radius: 4px; padding: 0 4px; cursor: pointer; user-select: none; }
+        .cloze-revealed { background: rgba(41, 151, 255, 0.2); color: #2997FF; border-radius: 4px; padding: 0 4px; font-weight: bold; }
 
-        .glass-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.3s;
-        }
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: #007AFF;
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
-        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
 
-        .nav-btn.active { transform: scale(1.05); }
-        .nav-btn.active > div:first-child { color: #007AFF; }
-        .nav-btn.active > span { color: #007AFF; font-weight: 600; }
+        /* Heatmap Grid */
+        .heatmap-grid { display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px; }
+        .heatmap-cell { width: 100%; padding-top: 100%; border-radius: 2px; background: #222; }
     </style>
 </head>
-<body class="h-[100dvh] w-full flex selection:bg-ios-blue selection:text-white">
+<body class="flex flex-col h-[100dvh] w-full max-w-md mx-auto bg-black border-x border-neutral-900 relative">
 
-    <!-- APP CONTAINER -->
-    <div id="app" class="flex-1 flex flex-col relative w-full h-full max-w-2xl mx-auto bg-dark-bg border-x border-dark-border shadow-2xl overflow-hidden">
+    <!-- HEADER -->
+    <header class="h-16 flex items-center justify-between px-5 z-20 bg-black/50 backdrop-blur-md sticky top-0">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-xs font-bold shadow-lg shadow-blue-900/40">AI</div>
+            <h1 class="text-lg font-bold tracking-tight">Ultra<span class="text-brand-blue">Anki</span></h1>
+        </div>
+        <div class="flex gap-4 text-sm font-medium">
+            <div class="flex items-center gap-1 text-brand-warning">
+                <i class="fa-solid fa-fire"></i> <span id="header-streak">0</span>
+            </div>
+            <div class="flex items-center gap-1 text-brand-blue">
+                <i class="fa-solid fa-layer-group"></i> <span id="header-cards">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ASOSIY VIEWPORT (Router render qiladigan joy) -->
+    <main id="app-viewport" class="flex-1 overflow-y-auto overflow-x-hidden p-4 relative scroll-smooth pb-24">
+        <!-- JS orqali kontent to'ldiriladi -->
+    </main>
+
+    <!-- NAVBAR -->
+    <nav class="h-20 glass fixed bottom-0 w-full max-w-md z-30 flex justify-around items-center pb-2">
+        <button onclick="Router.navigate('decks')" class="nav-btn group flex flex-col items-center gap-1 p-2 w-16" id="nav-decks">
+            <i class="fa-solid fa-house text-xl mb-0.5 transition group-active:scale-90"></i>
+            <span class="text-[10px] font-medium opacity-70">Uy</span>
+        </button>
         
-        <!-- DYNAMIC HEADER -->
-        <header id="app-header" class="h-14 px-4 flex items-center justify-between glass z-40 fixed top-0 w-full max-w-2xl border-b border-dark-border">
-            <div class="text-lg font-bold">Ultra Anki</div>
-            <div></div>
-            <div></div>
-        </header>
-
-        <!-- MAIN VIEWPORT -->
-        <main id="viewport" class="flex-1 overflow-y-auto overflow-x-hidden pt-16 pb-24 px-4 scroll-smooth">
-            <!-- Content injected here -->
-        </main>
-
-        <!-- TAB BAR (iOS Style) -->
-        <nav class="h-20 glass fixed bottom-0 w-full max-w-2xl z-50 flex items-start justify-around pt-2 border-t border-white/10 safe-bottom">
-            <button onclick="Router.nav('decks')" class="nav-btn group flex flex-col items-center gap-1 w-16 active" data-tab="decks">
-                <div class="text-2xl transition-transform group-active:scale-90"><i class="fa-solid fa-layer-group"></i></div>
-                <span class="text-[10px] font-medium">Qo'plamlar</span>
-            </button>
-            <button onclick="Router.nav('add')" class="nav-btn group flex flex-col items-center gap-1 w-16" data-tab="add">
-                <div class="w-10 h-10 bg-ios-blue rounded-full flex items-center justify-center text-white text-lg shadow-glow transition-transform group-active:scale-90"><i class="fa-solid fa-plus"></i></div>
-                <span class="text-[10px] font-medium text-gray-400">Qo'shish</span>
-            </button>
-            <button onclick="Router.nav('stats')" class="nav-btn group flex flex-col items-center gap-1 w-16" data-tab="stats">
-                <div class="text-2xl transition-transform group-active:scale-90 text-gray-500"><i class="fa-solid fa-chart-line"></i></div>
-                <span class="text-[10px] font-medium text-gray-500">Statistika</span>
-            </button>
-        </nav>
-
-        <!-- SETTINGS OVERLAY -->
-        <div id="settings-modal" class="fixed inset-0 z-[100] hidden">
-            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="UI.closeSettings()"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-3/4 max-w-sm bg-dark-surface border-l border-dark-border shadow-2xl transform transition-transform duration-300 translate-x-full" id="settings-panel">
-                <div class="p-6 pb-32 h-full overflow-y-auto">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold">Sozlamalar</h2>
-                        <button onclick="UI.closeSettings()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-                    </div>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <label class="text-xs font-bold text-gray-500 uppercase mb-3 block">Kunlik maqsad</label>
-                            <input type="number" id="daily-goal" min="1" max="100" value="20" class="w-full glass-input p-3 rounded-lg text-sm" placeholder="Kunlik kartalr soni">
-                        </div>
-
-                        <div>
-                            <label class="text-xs font-bold text-gray-500 uppercase mb-3 block">Ma'lumotlar</label>
-                            <button onclick="DataMgr.exportJSON()" class="w-full py-3 bg-dark-surface2 hover:bg-dark-border rounded-lg text-left px-4 text-sm font-medium flex items-center gap-3 transition mb-2">
-                                <i class="fa-solid fa-download text-ios-blue"></i> Zaxiralash (JSON)
-                            </button>
-                            <button onclick="DataMgr.importJSON()" class="w-full py-3 bg-dark-surface2 hover:bg-dark-border rounded-lg text-left px-4 text-sm font-medium flex items-center gap-3 transition mb-2">
-                                <i class="fa-solid fa-upload text-ios-green"></i> Yuklash (JSON)
-                            </button>
-                            <button onclick="if(confirm('Barchasini o\'chirish?\n\nBu amalni bekor qilib bo\'lmaydi!')) DataMgr.reset()" class="w-full py-3 bg-red-900/20 hover:bg-red-900/30 text-red-500 rounded-lg text-left px-4 text-sm font-medium flex items-center gap-3 transition">
-                                <i class="fa-solid fa-trash"></i> Barchasini o'chirish
-                            </button>
-                        </div>
-
-                        <div>
-                            <label class="text-xs font-bold text-gray-500 uppercase mb-2 block">Haqida</label>
-                            <p class="text-xs text-gray-400 leading-relaxed">
-                                <strong>Ultra Anki Pro v2.5.0</strong><br/>
-                                Engine: SM-2 Enhanced<br/>
-                                <span class="text-ios-blue">Muhammad Daler tomonidan yasalgan</span><br/>
-                                © 2025 All Rights Reserved
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        <button onclick="Router.navigate('add')" class="nav-btn group flex flex-col items-center gap-1 p-2 w-16 -mt-6" id="nav-add">
+            <div class="w-12 h-12 bg-brand-blue rounded-full flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/30 transition group-active:scale-90">
+                <i class="fa-solid fa-plus"></i>
             </div>
-        </div>
+        </button>
+        
+        <button onclick="Router.navigate('profile')" class="nav-btn group flex flex-col items-center gap-1 p-2 w-16" id="nav-profile">
+            <i class="fa-solid fa-chart-pie text-xl mb-0.5 transition group-active:scale-90"></i>
+            <span class="text-[10px] font-medium opacity-70">Profil</span>
+        </button>
+    </nav>
 
-        <!-- ALERT MODAL -->
-        <div id="alert-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center px-4">
-            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-            <div class="relative bg-dark-surface border border-dark-border rounded-2xl p-6 max-w-sm animate-up">
-                <h3 id="alert-title" class="text-lg font-bold mb-2"></h3>
-                <p id="alert-message" class="text-sm text-gray-400 mb-6"></p>
-                <button onclick="UI.closeAlert()" class="w-full py-3 bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-lg transition">OK</button>
-            </div>
-        </div>
-
+    <!-- FOOTER (Mandatory) -->
+    <div class="fixed bottom-24 left-0 w-full text-center pointer-events-none z-0 opacity-0 animate-slide-up" style="animation-delay: 1s; animation-fill-mode: forwards;">
+        <p class="text-[10px] text-neutral-700 font-mono">© Muhammad Daler tomonidan yasalgan</p>
     </div>
 
+    <!-- JAVASCRIPT ENGINE -->
     <script>
         /**
-         * ╔══════════════════════════════════════════════════════════════╗
-         * ║     ULTRA ANKI PRO - ADVANCED SPACED REPETITION ENGINE      ║
-         * ║                   Architecture v2.5.0                        ║
-         * ╚══════════════════════════════════════════════════════════════╝
+         * ULTRA SMART ANKI ENGINE (v3.0)
+         * Tizim: MVC Pattern + LocalStorage + SM-2 Algorithm
          */
 
-        const LANGUAGE = {
-            uz: {
-                'decks': 'To\'plamlar',
-                'add': 'Qo\'shish',
-                'stats': 'Statistika',
-                'add_card': 'Karta qo\'shish',
-                'add_deck': 'To\'plam yaratish',
-                'card_front': 'Savol',
-                'card_back': 'Javob',
-                'card_type': 'Karta turi',
-                'basic': 'Oddiy',
-                'cloze': 'Bo\'shliq',
-                'deck_name': 'To\'plam nomi',
-                'start': 'Boshlash',
-                'again': 'Bekor',
-                'hard': 'Qiyin',
-                'good': 'Yaxshi',
-                'easy': 'Oson',
-                'no_cards': 'Kartalar yo\'q',
-                'session_end': 'Sessiya tugadi!',
-                'question': 'Savol',
-                'answer': 'Javob',
-                'loading': 'Yuklanmoqda...',
-            },
-            en: {
-                'decks': 'Decks',
-                'add': 'Add',
-                'stats': 'Stats',
-                'add_card': 'Add Card',
-                'add_deck': 'Create Deck',
-                'card_front': 'Question',
-                'card_back': 'Answer',
-                'card_type': 'Card Type',
-                'basic': 'Basic',
-                'cloze': 'Cloze',
-                'deck_name': 'Deck Name',
-                'start': 'Start',
-                'again': 'Again',
-                'hard': 'Hard',
-                'good': 'Good',
-                'easy': 'Easy',
-                'no_cards': 'No cards',
-                'session_end': 'Session complete!',
-                'question': 'Question',
-                'answer': 'Answer',
-                'loading': 'Loading...',
-            }
-        };
-
-        let currentLang = 'uz';
-        const t = (key) => LANGUAGE[currentLang][key] || key;
-
-        // ═══════════════════════════════════════════════════════════════
-        // 1. DATABASE & STATE MANAGEMENT
-        // ═══════════════════════════════════════════════════════════════
-
+        // --- 1. MA'LUMOTLAR BAZASI VA MODEL ---
         const DB = {
-            key: 'ultra_anki_pro_db_v2',
+            KEY: 'ultra_anki_v3_data',
             state: {
-                user: { xp: 0, level: 1, streak: 0, lastStudy: null, heatmap: {}, totalCards: 0, totalReviews: 0 },
-                decks: [], 
+                decks: [],
                 cards: [],
-                settings: { cardsPerDay: 20, language: 'uz' }
+                user: { xp: 0, streak: 0, lastStudyDate: null, heatmap: {} },
+                settings: { dailyGoal: 20 }
             },
 
             init() {
-                const stored = localStorage.getItem(this.key);
-                if (stored) {
+                const saved = localStorage.getItem(this.KEY);
+                if (saved) {
                     try {
-                        const parsed = JSON.parse(stored);
+                        const parsed = JSON.parse(saved);
+                        // Eski versiya ma'lumotlarini migratsiya qilish (xavfsizlik uchun)
                         this.state = { ...this.state, ...parsed };
-                        currentLang = this.state.settings.language;
                     } catch (e) {
-                        console.error('DB Corrupt:', e);
-                        this.seed();
+                        console.error("DB Error:", e);
+                        this.seed(); // Agar buzilgan bo'lsa qayta yaratish
                     }
                 } else {
                     this.seed();
                 }
-                this.checkStreak();
+                this.updateStreak();
             },
 
             save() {
-                localStorage.setItem(this.key, JSON.stringify(this.state));
+                localStorage.setItem(this.KEY, JSON.stringify(this.state));
+                UI.updateHeader();
             },
 
             seed() {
-                const now = Date.now();
+                // Boshlang'ich demo ma'lumotlar
+                const d1 = this.uuid();
                 this.state.decks = [
-                    { id: 'd1', name: 'Ingliz tili - A1', color: 'from-blue-500 to-cyan-500', created: now, description: 'Beginner English' },
-                    { id: 'd2', name: 'Tarix', color: 'from-orange-500 to-red-500', created: now, description: 'Dunyo tarixi' }
+                    { id: d1, name: "Ingliz Tili (A1)", color: "from-blue-600 to-cyan-500", icon: "fa-earth-americas" },
+                    { id: this.uuid(), name: "Dasturlash", color: "from-purple-600 to-pink-600", icon: "fa-code" }
                 ];
+                
                 this.state.cards = [
-                    { id: 'c1', deckId: 'd1', front: 'Apple', back: 'Olma', type: 'basic', tags: ['fruit'], srs: this.defaultSRS(), created: now },
-                    { id: 'c2', deckId: 'd1', front: 'Book', back: 'Kitob', type: 'basic', tags: ['basic'], srs: this.defaultSRS(), created: now },
-                    { id: 'c3', deckId: 'd1', front: 'O\'zbekiston poytaxti {{c1::Toshkent}} shahridir.', back: '', type: 'cloze', tags: ['geography'], srs: this.defaultSRS(), created: now },
-                    { id: 'c4', deckId: 'd2', front: 'O\'zbekiston mustaqil davlat bo\'lgan yili:', back: '1991', type: 'basic', tags: ['uzbekistan'], srs: this.defaultSRS(), created: now }
+                    this.createCard(d1, "Apple", "Olma", "basic"),
+                    this.createCard(d1, "Hello", "Salom", "basic"),
+                    this.createCard(d1, "O'zbekiston poytaxti {{c1::Toshkent}} shahridir.", "", "cloze")
                 ];
                 this.save();
             },
 
-            defaultSRS() {
-                return { 
+            uuid() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            },
+
+            createCard(deckId, front, back, type) {
+                return {
+                    id: this.uuid(),
+                    deckId,
+                    front,
+                    back,
+                    type, // 'basic' or 'cloze'
+                    step: 0, // 0=new, 1=learning, 2=review
                     interval: 0,
                     ease: 2.5,
-                    due: Date.now(),
-                    reps: 0,
-                    lapses: 0,
-                    state: 'new'
+                    dueDate: Date.now(), // Hozir o'qish mumkin
+                    createdAt: Date.now()
                 };
             },
 
-            checkStreak() {
+            updateStreak() {
                 const today = new Date().toDateString();
-                const lastStudy = this.state.user.lastStudy;
-                if (lastStudy !== today) {
-                    const yesterday = new Date(Date.now() - 86400000).toDateString();
-                    if (lastStudy !== yesterday) {
-                        this.state.user.streak = 0;
-                    }
+                if (this.state.user.lastStudyDate !== today) {
+                    // Logic: Agar kecha o'qimagan bo'lsa streak 0 bo'lishi mumkin
+                    // Bu yerda oddiy logika: oxirgi o'qish sanasi bugun bo'lmasa, yangilaymiz
                 }
+            },
+
+            logActivity() {
+                const todayStr = new Date().toISOString().split('T')[0];
+                const todayFull = new Date().toDateString();
+
+                if (this.state.user.lastStudyDate !== todayFull) {
+                    this.state.user.streak++;
+                    this.state.user.lastStudyDate = todayFull;
+                }
+                
+                if (!this.state.user.heatmap[todayStr]) this.state.user.heatmap[todayStr] = 0;
+                this.state.user.heatmap[todayStr]++;
+                this.state.user.xp += 10;
+                this.save();
             }
         };
 
-        // ═══════════════════════════════════════════════════════════════
-        // 2. ADVANCED SRS ALGORITHM (SM-2 ENHANCED)
-        // ═══════════════════════════════════════════════════════════════
-
-        const SRS = {
-            /**
-             * Process card response based on rating (1-4)
-             * 1 = Again (Fail)
-             * 2 = Hard 
-             * 3 = Good
-             * 4 = Easy
-             */
-            updateCard(card, rating) {
+        // --- 2. INTELLIGENT ALGORITHM (SM-2 Modified) ---
+        const Algo = {
+            // Rating: 0 (Again), 1 (Hard), 2 (Good), 3 (Easy)
+            process(card, rating) {
                 const now = Date.now();
-                let { interval, ease, reps, lapses } = card.srs;
+                const oneDay = 24 * 60 * 60 * 1000;
+                const oneMin = 60 * 1000;
 
-                if (rating === 1) {
-                    // Reset on failure
-                    interval = 0;
-                    reps = 0;
-                    lapses++;
-                    card.srs.state = 'learning';
+                let nextInterval = 0; // ms
+
+                if (rating === 0) { // Again (Qayta)
+                    card.step = 0;
+                    card.interval = 0;
+                    card.ease = Math.max(1.3, card.ease - 0.2);
+                    nextInterval = 1 * oneMin; // 1 minutdan keyin
                 } else {
-                    // Increase reps on success
-                    if (reps === 0) interval = 1;
-                    else if (reps === 1) interval = 6;
-                    else {
-                        let modifier = 1;
-                        if (rating === 2) modifier = 0.8;
-                        if (rating === 4) modifier = 1.2;
-                        interval = Math.max(1, Math.round(interval * ease * modifier));
+                    // Muvaffaqiyatli
+                    if (card.step === 0) {
+                        card.step = 1;
+                        card.interval = 1; // 1 kun
+                        nextInterval = 10 * oneMin; // 10 minut
+                    } else if (card.step === 1) {
+                        card.step = 2;
+                        card.interval = 1; // 1 kun
+                        nextInterval = 1 * oneDay;
+                    } else {
+                        // Review Mode (SM-2 math)
+                        if (rating === 1) card.ease -= 0.15; // Hard
+                        if (rating === 3) card.ease += 0.15; // Easy
+
+                        card.interval = Math.ceil(card.interval * card.ease);
+                        
+                        // Hard bonus multiplier kamroq
+                        if (rating === 1) card.interval = Math.max(1, Math.floor(card.interval * 0.5)); 
+                        
+                        nextInterval = card.interval * oneDay;
                     }
-                    
-                    reps++;
-                    card.srs.state = reps < 2 ? 'learning' : 'review';
                 }
 
-                // Ease Factor (SM-2 Formula)
-                if (rating === 1) ease = Math.max(1.3, ease - 0.3);
-                else if (rating === 2) ease = Math.max(1.3, ease - 0.15);
-                else if (rating === 4) ease = Math.min(2.8, ease + 0.15);
-                
-                // Calculate next due date
-                const dayMs = 86400000;
-                let dueOffset = 0;
-                if (rating === 1) dueOffset = 60000; // 1 minute
-                else dueOffset = interval * dayMs;
-
-                card.srs = { interval, ease, reps, lapses, due: now + dueOffset, state: card.srs.state };
+                card.dueDate = now + nextInterval;
                 return card;
             },
 
-            getDue(deckId) {
+            getDueCards(deckId) {
                 const now = Date.now();
                 return DB.state.cards
-                    .filter(c => c.deckId === deckId && c.srs.due <= now)
-                    .sort((a, b) => a.srs.due - b.srs.due);
-            },
-
-            getAllDue() {
-                const now = Date.now();
-                return DB.state.cards
-                    .filter(c => c.srs.due <= now)
-                    .sort((a, b) => a.srs.due - b.srs.due);
+                    .filter(c => c.deckId === deckId && c.dueDate <= now)
+                    .sort((a, b) => a.dueDate - b.dueDate); // Eng eskisi birinchi
             }
         };
 
-        // ═══════════════════════════════════════════════════════════════
-        // 3. UI RENDERING ENGINE
-        // ═══════════════════════════════════════════════════════════════
-
+        // --- 3. UI RENDERER & ROUTER ---
         const Router = {
-            activeView: 'decks',
-            params: {},
-
-            nav(view, params = {}) {
-                this.activeView = view;
-                this.params = params;
-
-                // Update nav buttons
+            current: 'decks',
+            
+            navigate(route, params = null) {
+                this.current = route;
+                
+                // Navbar Active State
                 document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.dataset.tab === view) btn.classList.add('active');
+                    btn.classList.remove('text-brand-blue');
+                    btn.classList.add('text-neutral-500');
                 });
+                
+                const navId = route === 'study' ? 'nav-decks' : `nav-${route}`;
+                const activeBtn = document.getElementById(navId);
+                if(activeBtn) {
+                    activeBtn.classList.add('text-brand-blue');
+                    activeBtn.classList.remove('text-neutral-500');
+                }
 
-                this.render();
+                const viewport = document.getElementById('app-viewport');
+                viewport.innerHTML = ''; // Tozalash
+
+                switch(route) {
+                    case 'decks': this.renderDecks(viewport); break;
+                    case 'add': this.renderAdd(viewport); break;
+                    case 'profile': this.renderProfile(viewport); break;
+                    case 'study': this.renderStudy(viewport, params); break;
+                }
             },
 
-            render() {
-                const container = document.getElementById('viewport');
-                const header = document.getElementById('app-header');
+            renderDecks(container) {
+                const decks = DB.state.decks;
+                const totalDue = DB.state.cards.filter(c => c.dueDate <= Date.now()).length;
 
-                // ━━━ DECKS VIEW ━━━
-                if (this.activeView === 'decks') {
-                    header.innerHTML = `
-                        <h1 class="text-lg font-bold">${t('decks')}</h1>
-                        <div></div>
-                        <button onclick="UI.openSettings()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-gear text-lg"></i></button>
-                    `;
+                let html = `
+                    <div class="space-y-6 animate-slide-up">
+                        <!-- Hero Card -->
+                        <div class="p-6 rounded-3xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-neutral-800 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-brand-blue blur-[80px] opacity-20"></div>
+                            <h2 class="text-neutral-400 text-xs font-bold uppercase tracking-widest mb-1">Bugungi Reja</h2>
+                            <div class="flex items-end gap-2">
+                                <span class="text-4xl font-extrabold text-white">${totalDue}</span>
+                                <span class="text-sm text-neutral-400 mb-1.5 font-medium">ta karta takrorlash kerak</span>
+                            </div>
+                            <div class="mt-4 h-1.5 w-full bg-neutral-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-brand-blue rounded-full" style="width: ${Math.min(100, (DB.state.user.xp / 1000) * 100)}%"></div>
+                            </div>
+                        </div>
 
-                    const totalDue = DB.state.decks.reduce((sum, d) => sum + SRS.getDue(d.id).length, 0);
-                    const totalCards = DB.state.cards.length;
+                        <!-- Decks List -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-3 px-1">To'plamlar</h3>
+                            <div class="grid gap-3">
+                `;
 
-                    let html = `<div class="animate-enter space-y-6">`;
+                if (decks.length === 0) {
+                    html += `<div class="text-center py-10 text-neutral-500">To'plamlar yo'q. Yangi qo'shing!</div>`;
+                }
 
-                    // Hero Card
+                decks.forEach(deck => {
+                    const dueCount = Algo.getDueCards(deck.id).length;
+                    const totalCount = DB.state.cards.filter(c => c.deckId === deck.id).length;
+                    
                     html += `
-                        <div class="mt-2 p-6 rounded-3xl bg-gradient-to-br from-dark-surface to-dark-surface2 border border-dark-border">
-                            <div class="flex justify-between items-end mb-4">
-                                <div>
-                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Takrorlashga tayyor</p>
-                                    <h2 class="text-5xl font-extrabold text-white">${totalDue}</h2>
+                        <div onclick="Router.navigate('study', '${deck.id}')" class="group relative bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 p-4 rounded-2xl flex items-center justify-between transition active:scale-[0.98]">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${deck.color} flex items-center justify-center text-white text-xl shadow-lg">
+                                    <i class="fa-solid ${deck.icon}"></i>
                                 </div>
-                                <div class="text-right">
-                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Streak</p>
-                                    <div class="flex items-center gap-2 justify-end">
-                                        <i class="fa-solid fa-fire text-orange-500 text-xl"></i>
-                                        <span class="text-2xl font-bold">${DB.state.user.streak}</span>
-                                    </div>
+                                <div>
+                                    <h4 class="font-bold text-base group-hover:text-brand-blue transition-colors">${deck.name}</h4>
+                                    <p class="text-xs text-neutral-500 font-mono mt-0.5">${totalCount} karta • <span class="${dueCount > 0 ? 'text-brand-success' : ''}">${dueCount} due</span></p>
                                 </div>
                             </div>
-                            <div class="w-full bg-dark-bg/30 rounded-full h-2">
-                                <div class="bg-gradient-to-r from-ios-blue to-cyan-500 h-full rounded-full transition-all" style="width: ${Math.min(100, (totalDue / DB.state.settings.cardsPerDay) * 100)}%"></div>
+                            <div class="w-8 h-8 rounded-full bg-black flex items-center justify-center text-neutral-600">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
                             </div>
                         </div>
                     `;
+                });
 
-                    // Decks List
-                    html += `<h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">To'plamlar</h3>`;
-                    html += `<div class="space-y-3">`;
+                html += `</div></div></div>`;
+                container.innerHTML = html;
+            },
 
-                    DB.state.decks.forEach(deck => {
-                        const due = SRS.getDue(deck.id).length;
-                        const total = DB.state.cards.filter(c => c.deckId === deck.id).length;
-                        const deckColor = deck.color || 'from-blue-500 to-cyan-500';
+            renderStudy(container, deckId) {
+                const deck = DB.state.decks.find(d => d.id === deckId);
+                const queue = Algo.getDueCards(deckId);
+                
+                if (queue.length === 0) {
+                    container.innerHTML = `
+                        <div class="flex flex-col items-center justify-center h-[70vh] text-center animate-scale-in">
+                            <div class="w-24 h-24 rounded-full bg-neutral-900 flex items-center justify-center text-4xl text-brand-success mb-6">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold mb-2">Barchasi tamom!</h2>
+                            <p class="text-neutral-400 mb-8">Bu to'plam bo'yicha bugungi darslar tugadi.</p>
+                            <button onclick="Router.navigate('decks')" class="px-8 py-3 bg-white text-black font-bold rounded-full active:scale-95 transition">Bosh menyu</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const card = queue[0]; // Take first card
+                
+                // Cloze Logic Processing
+                let frontHTML = card.front;
+                let backHTML = card.back;
+                
+                if (card.type === 'cloze') {
+                    // Regex: {{c1::Answer}} -> [ ... ]
+                    frontHTML = card.front.replace(/{{c1::(.*?)}}/g, '<span class="cloze-hidden">[ ... ]</span>');
+                    backHTML = card.front.replace(/{{c1::(.*?)}}/g, '<span class="cloze-revealed">$1</span>');
+                }
+
+                container.innerHTML = `
+                    <div class="flex flex-col h-full animate-scale-in">
+                        <!-- Top Bar -->
+                        <div class="flex justify-between items-center mb-4 px-2">
+                            <button onclick="Router.navigate('decks')" class="text-neutral-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                            <span class="text-xs font-mono text-brand-blue font-bold">${queue.length} ta qoldi</span>
+                            <button onclick="StudyController.deleteCard('${card.id}')" class="text-neutral-600 hover:text-brand-danger"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+
+                        <!-- Card Container -->
+                        <div class="flex-1 perspective-container relative mb-6">
+                            <div id="active-card" class="flip-card-inner shadow-2xl" onclick="StudyController.flip()">
+                                <!-- FRONT -->
+                                <div class="flip-card-front border border-neutral-800">
+                                    <div class="text-xs font-bold text-neutral-500 uppercase mb-4 tracking-widest">${deck.name}</div>
+                                    <div class="text-2xl font-medium leading-relaxed">${frontHTML}</div>
+                                    <div class="absolute bottom-6 text-xs text-neutral-600 animate-pulse">Javobni ko'rish uchun bosing</div>
+                                </div>
+                                <!-- BACK -->
+                                <div class="flip-card-back border border-neutral-800">
+                                    <div class="text-base text-neutral-500 line-through mb-6 opacity-50">${card.type === 'basic' ? card.front : ''}</div>
+                                    <div class="text-2xl font-bold text-white leading-relaxed">${backHTML}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Controls -->
+                        <div id="controls-area" class="h-16">
+                            <!-- Show Answer Button -->
+                            <button id="btn-show" onclick="StudyController.flip()" class="w-full h-14 bg-brand-blue hover:bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-900/20 active:scale-[0.98] transition">
+                                Javobni ko'rsatish
+                            </button>
+
+                            <!-- Grading Buttons (Initially Hidden) -->
+                            <div id="btn-grading" class="hidden grid-cols-4 gap-2 h-14">
+                                <button onclick="StudyController.rate('${card.id}', 0, '${deckId}')" class="bg-neutral-900 border border-brand-danger/30 text-brand-danger rounded-xl font-bold text-sm flex flex-col items-center justify-center hover:bg-brand-danger/10 active:scale-95">
+                                    <span>Qayta</span><span class="text-[10px] opacity-60">1m</span>
+                                </button>
+                                <button onclick="StudyController.rate('${card.id}', 1, '${deckId}')" class="bg-neutral-900 border border-brand-warning/30 text-brand-warning rounded-xl font-bold text-sm flex flex-col items-center justify-center hover:bg-brand-warning/10 active:scale-95">
+                                    <span>Qiyin</span><span class="text-[10px] opacity-60">10m</span>
+                                </button>
+                                <button onclick="StudyController.rate('${card.id}', 2, '${deckId}')" class="bg-neutral-900 border border-brand-success/30 text-brand-success rounded-xl font-bold text-sm flex flex-col items-center justify-center hover:bg-brand-success/10 active:scale-95">
+                                    <span>Yaxshi</span><span class="text-[10px] opacity-60">1d</span>
+                                </button>
+                                <button onclick="StudyController.rate('${card.id}', 3, '${deckId}')" class="bg-neutral-900 border border-brand-blue/30 text-brand-blue rounded-xl font-bold text-sm flex flex-col items-center justify-center hover:bg-brand-blue/10 active:scale-95">
+                                    <span>Oson</span><span class="text-[10px] opacity-60">4d</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderAdd(container) {
+                const decks = DB.state.decks;
+                let deckOptions = decks.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+
+                container.innerHTML = `
+                    <div class="animate-slide-up space-y-6">
+                        <h2 class="text-2xl font-bold">Yangi qo'shish</h2>
                         
-                        html += `
-                            <div onclick="Router.nav('study_intro', {deckId: '${deck.id}'})" class="group relative overflow-hidden bg-dark-surface hover:bg-dark-surface2 border border-dark-border p-4 rounded-2xl flex items-center justify-between transition-all duration-200 active:scale-95 cursor-pointer">
-                                <div class="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b ${deckColor} opacity-80"></div>
-                                <div class="pl-3 flex-1">
-                                    <h4 class="text-base font-bold text-white group-hover:text-ios-blue transition-colors">${deck.name}</h4>
-                                    <p class="text-xs text-gray-400 font-mono mt-1">${total} karta ${due > 0 ? `• <span class="text-ios-green font-bold">${due} due</span>` : ''}</p>
-                                </div>
-                                <div class="w-8 h-8 rounded-full bg-dark-bg flex items-center justify-center text-gray-500"><i class="fa-solid fa-chevron-right text-xs"></i></div>
-                            </div>
-                        `;
-                    });
-
-                    html += `</div></div>`;
-                    container.innerHTML = html;
-                }
-
-                // ━━━ ADD VIEW ━━━
-                else if (this.activeView === 'add') {
-                    header.innerHTML = `
-                        <h1 class="text-lg font-bold">${t('add')}</h1>
-                        <div></div>
-                        <button onclick="Router.nav('decks')" class="text-ios-blue font-medium text-sm">Bekor</button>
-                    `;
-
-                    const deckOptions = DB.state.decks.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
-
-                    container.innerHTML = `
-                        <div class="animate-enter space-y-6 mt-2">
-                            <div class="flex p-1 bg-dark-surface rounded-xl border border-dark-border">
-                                <button onclick="UI.toggleAddMode('card')" id="tab-card" class="flex-1 py-2 text-xs font-bold rounded-lg bg-dark-surface2 text-white shadow-sm">Karta</button>
-                                <button onclick="UI.toggleAddMode('deck')" id="tab-deck" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400">To'plam</button>
-                            </div>
-
-                            <!-- CARD FORM -->
-                            <div id="form-card" class="space-y-4">
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">TO'PLAM</label>
-                                    <select id="inp-deck" class="w-full glass-input p-3 rounded-lg outline-none text-sm">
-                                        ${deckOptions}
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">KARTA TURI</label>
-                                    <div class="flex gap-2">
-                                        <button onclick="UI.setCardType('basic')" id="btn-type-basic" class="flex-1 py-2 bg-ios-blue/20 text-ios-blue border border-ios-blue/50 rounded-lg text-xs font-bold">Oddiy</button>
-                                        <button onclick="UI.setCardType('cloze')" id="btn-type-cloze" class="flex-1 py-2 bg-dark-surface border border-dark-border text-gray-400 rounded-lg text-xs font-bold">Bo'shliq</button>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">SAVOL / MATN</label>
-                                    <textarea id="inp-front" rows="4" class="w-full glass-input p-3 rounded-lg outline-none text-sm resize-none" placeholder="Savolni kiriting..."></textarea>
-                                    <p id="help-cloze" class="hidden text-[10px] text-gray-400 mt-2">Yashirish uchun: {{c1::so'z}}</p>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">JAVOB</label>
-                                    <textarea id="inp-back" rows="3" id="inp-back-text" class="w-full glass-input p-3 rounded-lg outline-none text-sm resize-none" placeholder="Javobni kiriting..."></textarea>
-                                </div>
-
-                                <button onclick="Actions.addCard()" class="w-full py-4 bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-xl shadow-glow transition active:scale-95">
-                                    Qo'shish
-                                </button>
-                            </div>
-
-                            <!-- DECK FORM -->
-                            <div id="form-deck" class="hidden space-y-4">
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">TO'PLAM NOMI</label>
-                                    <input type="text" id="inp-deck-name" class="w-full glass-input p-3 rounded-lg outline-none text-sm" placeholder="Masalan: Fizika">
-                                </div>
-                                <button onclick="Actions.addDeck()" class="w-full py-4 bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-xl shadow-glow transition active:scale-95">
-                                    To'plam Yaratish
-                                </button>
-                            </div>
+                        <!-- Tabs -->
+                        <div class="flex p-1 bg-neutral-900 rounded-xl border border-neutral-800">
+                            <button id="tab-card" onclick="UI.toggleAddTab('card')" class="flex-1 py-2 text-sm font-bold rounded-lg bg-neutral-800 text-white shadow transition">Karta</button>
+                            <button id="tab-deck" onclick="UI.toggleAddTab('deck')" class="flex-1 py-2 text-sm font-bold rounded-lg text-neutral-500 hover:text-white transition">To'plam</button>
                         </div>
-                    `;
-                }
 
-                // ━━━ STATS VIEW ━━━
-                else if (this.activeView === 'stats') {
-                    header.innerHTML = `
-                        <h1 class="text-lg font-bold">Statistika</h1>
-                        <div></div>
-                        <button onclick="UI.openSettings()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-gear text-lg"></i></button>
-                    `;
-
-                    const user = DB.state.user;
-                    const totalCards = DB.state.cards.length;
-                    const level = Math.floor(user.xp / 100) + 1;
-
-                    // Generate heatmap
-                    let heatmapHTML = '';
-                    for (let i = 0; i < 84; i++) {
-                        const dateStr = new Date(Date.now() - i * 86400000).toISOString().split('T')[0];
-                        const activity = user.heatmap[dateStr] || 0;
-                        let level = 0;
-                        if (activity > 0) level = Math.min(4, Math.ceil(activity / 5));
-                        heatmapHTML += `<div class="heatmap-cell" data-level="${level}" title="${dateStr}: ${activity} reviews"></div>`;
-                    }
-
-                    container.innerHTML = `
-                        <div class="animate-enter space-y-6 mt-2">
-                            <div class="flex items-center gap-4 p-6 rounded-2xl bg-dark-surface border border-dark-border">
-                                <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-ios-blue to-purple-600 flex items-center justify-center text-3xl shadow-glow">
-                                    <i class="fa-solid fa-user"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-xl font-bold">Foydalanuvchi</h2>
-                                    <p class="text-sm text-gray-400">Level ${level} • ${user.xp} XP</p>
+                        <!-- ADD CARD FORM -->
+                        <div id="form-card" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-neutral-500 mb-2 uppercase">To'plam</label>
+                                <select id="inp-deck-id" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-4 text-white outline-none focus:border-brand-blue transition appearance-none">
+                                    ${deckOptions}
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-neutral-500 mb-2 uppercase">Turi</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="UI.setCardType('basic')" id="type-basic" class="py-3 rounded-xl border border-brand-blue bg-brand-blue/10 text-brand-blue font-bold text-sm">Savol-Javob</button>
+                                    <button onclick="UI.setCardType('cloze')" id="type-cloze" class="py-3 rounded-xl border border-neutral-800 bg-neutral-900 text-neutral-500 font-bold text-sm">Cloze (Bo'shliq)</button>
                                 </div>
                             </div>
 
                             <div>
-                                <h3 class="text-xs font-bold text-gray-500 uppercase mb-3">Faollik (Heatmap)</h3>
-                                <div class="glass p-4 rounded-2xl overflow-x-auto">
-                                    <div class="heatmap-grid">
-                                        ${heatmapHTML}
-                                    </div>
-                                    <div class="flex justify-between text-[10px] text-gray-500 mt-3">
-                                        <span>Kam</span>
-                                        <span>Ko'p</span>
-                                    </div>
-                                </div>
+                                <label class="block text-xs font-bold text-neutral-500 mb-2 uppercase">Front (Savol)</label>
+                                <textarea id="inp-front" rows="3" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-4 text-white text-lg outline-none focus:border-brand-blue transition resize-none placeholder-neutral-700" placeholder="Savolni kiriting..."></textarea>
+                                <p id="cloze-hint" class="hidden text-[10px] text-brand-blue mt-1">Masalan: O'zbekiston poytaxti {{c1::Toshkent}}.</p>
                             </div>
 
-                            <div class="grid grid-cols-3 gap-3">
-                                <div class="bg-dark-surface p-4 rounded-2xl border border-dark-border text-center">
-                                    <i class="fa-solid fa-fire text-ios-orange text-2xl mb-2"></i>
-                                    <h3 class="text-lg font-bold">${user.streak}</h3>
-                                    <p class="text-xs text-gray-500">Kunlik Streak</p>
-                                </div>
-                                <div class="bg-dark-surface p-4 rounded-2xl border border-dark-border text-center">
-                                    <i class="fa-solid fa-brain text-ios-blue text-2xl mb-2"></i>
-                                    <h3 class="text-lg font-bold">${totalCards}</h3>
-                                    <p class="text-xs text-gray-500">Jami Kartalar</p>
-                                </div>
-                                <div class="bg-dark-surface p-4 rounded-2xl border border-dark-border text-center">
-                                    <i class="fa-solid fa-check text-ios-green text-2xl mb-2"></i>
-                                    <h3 class="text-lg font-bold">${user.totalReviews}</h3>
-                                    <p class="text-xs text-gray-500">Ko'rib chiqildi</p>
-                                </div>
+                            <div id="back-container">
+                                <label class="block text-xs font-bold text-neutral-500 mb-2 uppercase">Back (Javob)</label>
+                                <textarea id="inp-back" rows="3" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-4 text-white text-lg outline-none focus:border-brand-blue transition resize-none placeholder-neutral-700" placeholder="Javobni kiriting..."></textarea>
                             </div>
 
-                            <div class="bg-dark-surface p-4 rounded-2xl border border-dark-border">
-                                <h3 class="text-sm font-bold mb-3">O'qish Tezligi</h3>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-xs">
-                                        <span class="text-gray-400">Bugun</span>
-                                        <span class="font-bold text-ios-blue">${user.heatmap[new Date().toISOString().split('T')[0]] || 0} karta</span>
-                                    </div>
-                                    <div class="w-full bg-dark-bg rounded-full h-2">
-                                        <div class="bg-gradient-to-r from-ios-blue to-cyan-500 h-full rounded-full" style="width: ${Math.min(100, ((user.heatmap[new Date().toISOString().split('T')[0]] || 0) / 20) * 100)}%"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <button onclick="Action.addCard()" class="w-full py-4 bg-brand-blue text-white font-bold rounded-xl text-lg shadow-lg shadow-blue-900/30 active:scale-[0.98] transition">Saqlash</button>
                         </div>
-                    `;
+
+                        <!-- ADD DECK FORM -->
+                        <div id="form-deck" class="space-y-4 hidden">
+                            <div>
+                                <label class="block text-xs font-bold text-neutral-500 mb-2 uppercase">Nomi</label>
+                                <input type="text" id="inp-deck-name" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-4 text-white outline-none focus:border-brand-blue transition" placeholder="Fan nomi...">
+                            </div>
+                            <button onclick="Action.addDeck()" class="w-full py-4 bg-white text-black font-bold rounded-xl text-lg active:scale-[0.98] transition">Yaratish</button>
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderProfile(container) {
+                const user = DB.state.user;
+                // Fake heatmap generation
+                let gridHTML = '';
+                for(let i=0; i<60; i++) {
+                    const opacity = Math.random() > 0.7 ? Math.random() : 0.1;
+                    const color = Math.random() > 0.7 ? `rgba(48, 209, 88, ${opacity})` : '#222';
+                    gridHTML += `<div class="heatmap-cell" style="background-color: ${color}"></div>`;
                 }
 
-                // ━━━ STUDY INTRO ━━━
-                else if (this.activeView === 'study_intro') {
-                    const deck = DB.state.decks.find(d => d.id === this.params.deckId);
-                    if (!deck) return Router.nav('decks');
-
-                    const due = SRS.getDue(deck.id);
-                    const deckColor = deck.color || 'from-blue-500 to-cyan-500';
-
-                    header.innerHTML = `
-                        <button onclick="Router.nav('decks')" class="text-ios-blue text-sm font-medium flex items-center gap-1"><i class="fa-solid fa-chevron-left"></i> Orqaga</button>
-                        <div></div>
-                        <div></div>
-                    `;
-
-                    container.innerHTML = `
-                        <div class="h-full flex flex-col justify-center items-center text-center animate-enter">
-                            <div class="w-24 h-24 rounded-3xl bg-gradient-to-br ${deckColor} flex items-center justify-center text-5xl shadow-glow mb-6">
-                                <i class="fa-solid fa-layer-group"></i>
+                container.innerHTML = `
+                    <div class="animate-slide-up">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-20 h-20 rounded-full bg-neutral-800 flex items-center justify-center border-2 border-brand-blue overflow-hidden">
+                                <i class="fa-solid fa-robot text-3xl text-neutral-400"></i>
                             </div>
-                            <h2 class="text-3xl font-extrabold mb-2">${deck.name}</h2>
-                            <p class="text-gray-400 mb-8">${due.length} ta karta takrorlashga tayyor</p>
-                            
-                            <button onclick="Study.start('${deck.id}')" class="w-full max-w-xs py-4 bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-2xl shadow-glow text-lg transition active:scale-95 mb-4">
-                                Boshlash
-                            </button>
-                            <button onclick="Router.nav('decks')" class="text-gray-500 font-medium text-sm hover:text-white transition">Keyinroq</button>
-                        </div>
-                    `;
-                }
-
-                // ━━━ STUDY SESSION ━━━
-                else if (this.activeView === 'study_session') {
-                    header.innerHTML = `
-                        <button onclick="if(confirm('Sessiyani tugatish?')) Router.nav('decks')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-                        <span id="study-count" class="text-xs font-bold text-gray-400">0 qoldi</span>
-                        <div></div>
-                    `;
-
-                    container.innerHTML = `
-                        <div class="h-full flex flex-col pt-4 pb-4">
-                            <div class="flex-1 relative perspective-1000 group">
-                                <div id="active-card" class="w-full h-full relative preserve-3d transition-transform duration-500 rounded-3xl shadow-2xl cursor-pointer" onclick="Study.flip()">
-                                    
-                                    <!-- FRONT -->
-                                    <div class="absolute inset-0 backface-hidden bg-dark-surface border border-dark-border rounded-3xl flex flex-col items-center justify-center p-8 text-center">
-                                        <div class="absolute top-4 left-4">
-                                            <span id="card-tag" class="px-3 py-1 rounded-full bg-ios-blue/20 text-ios-blue text-[10px] font-bold uppercase tracking-widest">Savol</span>
-                                        </div>
-                                        <div id="card-front-content" class="text-2xl font-medium leading-relaxed"></div>
-                                        <p class="absolute bottom-8 text-xs text-gray-500 opacity-70">Ko'rish uchun bosing</p>
-                                    </div>
-
-                                    <!-- BACK -->
-                                    <div class="absolute inset-0 backface-hidden rotate-y-180 bg-dark-surface2 border border-dark-border rounded-3xl flex flex-col items-center justify-center p-8 text-center">
-                                        <div class="text-gray-500 text-sm mb-6 opacity-50" id="card-front-ref"></div>
-                                        <div id="card-back-content" class="text-3xl font-bold text-white leading-relaxed"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="h-24 mt-6 relative">
-                                <button id="btn-show" onclick="Study.flip()" class="absolute inset-0 w-full bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-2xl shadow-glow text-lg transition active:scale-95">
-                                    Javobni Ko'rsatish
-                                </button>
-                                
-                                <div id="grading-grid" class="hidden grid grid-cols-4 gap-2 h-full animate-up">
-                                    <button onclick="Study.rate(1)" class="flex flex-col items-center justify-center bg-dark-surface border border-ios-red/30 text-ios-red rounded-xl hover:bg-ios-red/10 active:scale-95 transition text-xs font-bold">
-                                        <span>Again</span>
-                                        <span class="text-[9px] opacity-60">1m</span>
-                                    </button>
-                                    <button onclick="Study.rate(2)" class="flex flex-col items-center justify-center bg-dark-surface border border-ios-orange/30 text-ios-orange rounded-xl hover:bg-ios-orange/10 active:scale-95 transition text-xs font-bold">
-                                        <span>Hard</span>
-                                        <span class="text-[9px] opacity-60">6m</span>
-                                    </button>
-                                    <button onclick="Study.rate(3)" class="flex flex-col items-center justify-center bg-dark-surface border border-ios-green/30 text-ios-green rounded-xl hover:bg-ios-green/10 active:scale-95 transition text-xs font-bold">
-                                        <span>Good</span>
-                                        <span class="text-[9px] opacity-60">10m</span>
-                                    </button>
-                                    <button onclick="Study.rate(4)" class="flex flex-col items-center justify-center bg-dark-surface border border-ios-blue/30 text-ios-blue rounded-xl hover:bg-ios-blue/10 active:scale-95 transition text-xs font-bold">
-                                        <span>Easy</span>
-                                        <span class="text-[9px] opacity-60">4d</span>
-                                    </button>
-                                </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-white">Foydalanuvchi</h2>
+                                <p class="text-brand-blue font-mono font-bold">${user.xp} XP</p>
                             </div>
                         </div>
-                    `;
 
-                    // Keyboard shortcuts
-                    document.onkeydown = (e) => {
-                        if (Router.activeView !== 'study_session') return;
-                        if (e.code === 'Space') { e.preventDefault(); Study.flip(); }
-                        if (Study.isFlipped) {
-                            if (e.key === '1') Study.rate(1);
-                            if (e.key === '2') Study.rate(2);
-                            if (e.key === '3') Study.rate(3);
-                            if (e.key === '4') Study.rate(4);
-                        }
-                    };
-                }
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="glass-card p-4 rounded-2xl">
+                                <div class="text-brand-warning text-xl mb-1"><i class="fa-solid fa-fire"></i></div>
+                                <div class="text-2xl font-bold">${user.streak}</div>
+                                <div class="text-xs text-neutral-500 uppercase font-bold">Kunlik Streak</div>
+                            </div>
+                            <div class="glass-card p-4 rounded-2xl">
+                                <div class="text-brand-blue text-xl mb-1"><i class="fa-solid fa-layer-group"></i></div>
+                                <div class="text-2xl font-bold">${DB.state.cards.length}</div>
+                                <div class="text-xs text-neutral-500 uppercase font-bold">Jami Kartalar</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-neutral-900 p-4 rounded-2xl border border-neutral-800">
+                            <h3 class="text-xs font-bold text-neutral-500 uppercase mb-3">Faollik (So'nggi 60 kun)</h3>
+                            <div class="heatmap-grid mb-2">
+                                ${gridHTML}
+                            </div>
+                        </div>
+                        
+                        <button onclick="Action.clearData()" class="mt-8 w-full py-3 border border-brand-danger/50 text-brand-danger rounded-xl text-sm font-bold hover:bg-brand-danger/10">Barcha ma'lumotlarni o'chirish</button>
+                    </div>
+                `;
             }
         };
 
-        // ═══════════════════════════════════════════════════════════════
-        // 4. STUDY CONTROLLER
-        // ═══════════════════════════════════════════════════════════════
-
-        const Study = {
-            queue: [],
-            current: null,
-            isFlipped: false,
-            startTime: null,
-
-            start(deckId) {
-                this.queue = SRS.getDue(deckId);
-                if (this.queue.length === 0) {
-                    UI.alert('Kartalar yo\'q', 'Bu to\'plamda takrorlashga tayyar kartalar yo\'q');
-                    return;
-                }
-                this.startTime = Date.now();
-                Router.nav('study_session');
-                this.next();
-            },
-
-            next() {
-                if (this.queue.length === 0) {
-                    const sessionDuration = Math.round((Date.now() - this.startTime) / 1000);
-                    UI.alert('Sessiya tugadi!', `Siz ${DB.state.cards.filter(c => c.srs.due <= Date.now()).length} kartani o'qib chiqdingiz\n⏱️ Vaqt: ${sessionDuration}s`);
-                    Router.nav('decks');
-                    return;
-                }
-
-                this.current = this.queue[0];
-                this.isFlipped = false;
-
-                document.getElementById('study-count').innerText = this.queue.length;
-                document.getElementById('active-card').classList.remove('rotate-y-180');
-                document.getElementById('btn-show').classList.remove('hidden');
-                document.getElementById('grading-grid').classList.add('hidden');
-                document.getElementById('grading-grid').classList.remove('grid');
-
-                // Render card content
-                const cardFront = document.getElementById('card-front-content');
-                const cardBack = document.getElementById('card-back-content');
-                const cardTag = document.getElementById('card-tag');
-                const cardFrontRef = document.getElementById('card-front-ref');
-
-                if (this.current.type === 'cloze') {
-                    cardTag.textContent = 'BO\'SHLIQ';
-                    cardFront.innerHTML = this.current.front.replace(/\{\{c\d::(.+?)\}\}/g, '<span class="cloze-answer">•••</span>');
-                    cardBack.innerHTML = this.current.front.replace(/\{\{c\d::(.+?)\}\}/g, '<span class="cloze-answer">$1</span>');
-                    cardFrontRef.innerHTML = '';
-                } else {
-                    cardTag.textContent = 'SAVOL';
-                    cardFront.textContent = this.current.front;
-                    cardBack.textContent = this.current.back;
-                    cardFrontRef.textContent = this.current.front;
-                }
-            },
-
-            flip() {
-                this.isFlipped = !this.isFlipped;
-                const card = document.getElementById('active-card');
-                
-                if (this.isFlipped) {
-                    card.classList.add('rotate-y-180');
-                    document.getElementById('btn-show').classList.add('hidden');
-                    document.getElementById('grading-grid').classList.remove('hidden');
-                    document.getElementById('grading-grid').classList.add('grid');
-                } else {
-                    card.classList.remove('rotate-y-180');
-                    document.getElementById('btn-show').classList.remove('hidden');
-                    document.getElementById('grading-grid').classList.add('hidden');
-                    document.getElementById('grading-grid').classList.remove('grid');
-                }
-            },
-
-            rate(rating) {
-                if (!this.current) return;
-
-                // Update card SRS
-                SRS.updateCard(this.current, rating);
-
-                // Update user stats
-                const today = new Date().toISOString().split('T')[0];
-                DB.state.user.heatmap[today] = (DB.state.user.heatmap[today] || 0) + 1;
-                DB.state.user.totalReviews++;
-                DB.state.user.xp += rating * 10;
-                DB.state.user.lastStudy = new Date().toDateString();
-                if (!DB.state.user.streak) DB.state.user.streak = 1;
-
-                // Remove from queue and move to next
-                this.queue.shift();
-                DB.save();
-                this.next();
-            }
-        };
-
-        // ═══════════════════════════════════════════════════════════════
-        // 5. ACTIONS & HANDLERS
-        // ═══════════════════════════════════════════════════════════════
-
-        const Actions = {
-            addCard() {
-                const front = document.getElementById('inp-front').value.trim();
-                const back = document.getElementById('inp-back').value.trim();
-                const deckId = document.getElementById('inp-deck').value;
-                const cardType = document.getElementById('inp-front').dataset.cardType || 'basic';
-
-                if (!front) { UI.alert('Xato', 'Savolni kiriting'); return; }
-                if (cardType === 'basic' && !back) { UI.alert('Xato', 'Javobni kiriting'); return; }
-
-                const newCard = {
-                    id: 'c' + Date.now(),
-                    deckId: deckId,
-                    front: front,
-                    back: back,
-                    type: cardType,
-                    tags: [],
-                    srs: DB.defaultSRS(),
-                    created: Date.now()
-                };
-
-                DB.state.cards.push(newCard);
-                DB.save();
-
-                document.getElementById('inp-front').value = '';
-                document.getElementById('inp-back').value = '';
-                
-                UI.alert('Muvaffaqiyat', 'Karta qo\'shildi');
-                Router.nav('decks');
-            },
-
-            addDeck() {
-                const name = document.getElementById('inp-deck-name').value.trim();
-                if (!name) { UI.alert('Xato', 'To\'plam nomini kiriting'); return; }
-
-                const colors = ['from-blue-500 to-cyan-500', 'from-orange-500 to-red-500', 'from-green-500 to-emerald-500', 'from-purple-500 to-pink-500'];
-                const color = colors[Math.floor(Math.random() * colors.length)];
-
-                const newDeck = {
-                    id: 'd' + Date.now(),
-                    name: name,
-                    color: color,
-                    created: Date.now(),
-                    description: ''
-                };
-
-                DB.state.decks.push(newDeck);
-                DB.save();
-
-                document.getElementById('inp-deck-name').value = '';
-                UI.alert('Muvaffaqiyat', 'To\'plam yaratildi');
-                Router.nav('decks');
-            },
-
-            deleteDeck(deckId) {
-                if (!confirm('Bu to\'plamni o\'chirish?\n\nUndagi barcha kartalar ham o\'chiriladi!')) return;
-
-                DB.state.decks = DB.state.decks.filter(d => d.id !== deckId);
-                DB.state.cards = DB.state.cards.filter(c => c.deckId !== deckId);
-                DB.save();
-                Router.nav('decks');
-            }
-        };
-
-        // ═══════════════════════════════════════════════════════════════
-        // 6. UI UTILITIES
-        // ═══════════════════════════════════════════════════════════════
-
+        // --- 4. CONTROLLERS ---
         const UI = {
-            toggleAddMode(mode) {
+            currentCardType: 'basic',
+
+            updateHeader() {
+                document.getElementById('header-streak').innerText = DB.state.user.streak;
+                document.getElementById('header-cards').innerText = DB.state.cards.length;
+            },
+
+            toggleAddTab(tab) {
+                const btnCard = document.getElementById('tab-card');
+                const btnDeck = document.getElementById('tab-deck');
                 const formCard = document.getElementById('form-card');
                 const formDeck = document.getElementById('form-deck');
-                const tabCard = document.getElementById('tab-card');
-                const tabDeck = document.getElementById('tab-deck');
-                const helpCloze = document.getElementById('help-cloze');
 
-                if (mode === 'card') {
+                if (tab === 'card') {
+                    btnCard.className = 'flex-1 py-2 text-sm font-bold rounded-lg bg-neutral-800 text-white shadow transition';
+                    btnDeck.className = 'flex-1 py-2 text-sm font-bold rounded-lg text-neutral-500 hover:text-white transition';
                     formCard.classList.remove('hidden');
                     formDeck.classList.add('hidden');
-                    tabCard.classList.add('bg-dark-surface2', 'text-white', 'shadow-sm');
-                    tabCard.classList.remove('text-gray-400', 'bg-transparent');
-                    tabDeck.classList.remove('bg-dark-surface2', 'text-white', 'shadow-sm');
-                    tabDeck.classList.add('text-gray-400', 'bg-transparent');
                 } else {
-                    formCard.classList.add('hidden');
+                    btnDeck.className = 'flex-1 py-2 text-sm font-bold rounded-lg bg-neutral-800 text-white shadow transition';
+                    btnCard.className = 'flex-1 py-2 text-sm font-bold rounded-lg text-neutral-500 hover:text-white transition';
                     formDeck.classList.remove('hidden');
-                    tabCard.classList.remove('bg-dark-surface2', 'text-white', 'shadow-sm');
-                    tabCard.classList.add('text-gray-400', 'bg-transparent');
-                    tabDeck.classList.add('bg-dark-surface2', 'text-white', 'shadow-sm');
-                    tabDeck.classList.remove('text-gray-400', 'bg-transparent');
+                    formCard.classList.add('hidden');
                 }
             },
 
             setCardType(type) {
-                document.getElementById('inp-front').dataset.cardType = type;
-                const btnBasic = document.getElementById('btn-type-basic');
-                const btnCloze = document.getElementById('btn-type-cloze');
-                const helpCloze = document.getElementById('help-cloze');
+                this.currentCardType = type;
+                const btnBasic = document.getElementById('type-basic');
+                const btnCloze = document.getElementById('type-cloze');
+                const backContainer = document.getElementById('back-container');
+                const hint = document.getElementById('cloze-hint');
 
                 if (type === 'basic') {
-                    btnBasic.classList.add('bg-ios-blue/20', 'text-ios-blue', 'border-ios-blue/50');
-                    btnBasic.classList.remove('bg-dark-surface', 'border-dark-border', 'text-gray-400');
-                    btnCloze.classList.add('bg-dark-surface', 'border-dark-border', 'text-gray-400');
-                    btnCloze.classList.remove('bg-ios-blue/20', 'text-ios-blue', 'border-ios-blue/50');
-                    helpCloze.classList.add('hidden');
+                    btnBasic.classList.replace('border-neutral-800', 'border-brand-blue');
+                    btnBasic.classList.replace('bg-neutral-900', 'bg-brand-blue/10');
+                    btnBasic.classList.replace('text-neutral-500', 'text-brand-blue');
+
+                    btnCloze.classList.replace('border-brand-blue', 'border-neutral-800');
+                    btnCloze.classList.replace('bg-brand-blue/10', 'bg-neutral-900');
+                    btnCloze.classList.replace('text-brand-blue', 'text-neutral-500');
+
+                    backContainer.classList.remove('hidden');
+                    hint.classList.add('hidden');
                 } else {
-                    btnCloze.classList.add('bg-ios-blue/20', 'text-ios-blue', 'border-ios-blue/50');
-                    btnCloze.classList.remove('bg-dark-surface', 'border-dark-border', 'text-gray-400');
-                    btnBasic.classList.add('bg-dark-surface', 'border-dark-border', 'text-gray-400');
-                    btnBasic.classList.remove('bg-ios-blue/20', 'text-ios-blue', 'border-ios-blue/50');
-                    helpCloze.classList.remove('hidden');
+                    btnCloze.classList.replace('border-neutral-800', 'border-brand-blue');
+                    btnCloze.classList.replace('bg-neutral-900', 'bg-brand-blue/10');
+                    btnCloze.classList.replace('text-neutral-500', 'text-brand-blue');
+
+                    btnBasic.classList.replace('border-brand-blue', 'border-neutral-800');
+                    btnBasic.classList.replace('bg-brand-blue/10', 'bg-neutral-900');
+                    btnBasic.classList.replace('text-brand-blue', 'text-neutral-500');
+
+                    backContainer.classList.add('hidden');
+                    hint.classList.remove('hidden');
+                }
+            }
+        };
+
+        const Action = {
+            addDeck() {
+                const name = document.getElementById('inp-deck-name').value;
+                if (!name) return alert("Nom yozilmadi!");
+                
+                const colors = ['from-purple-600 to-indigo-600', 'from-green-500 to-emerald-700', 'from-orange-500 to-red-600', 'from-pink-500 to-rose-600'];
+                const icons = ['fa-atom', 'fa-book', 'fa-code', 'fa-globe'];
+
+                DB.state.decks.push({
+                    id: DB.uuid(),
+                    name: name,
+                    color: colors[Math.floor(Math.random()*colors.length)],
+                    icon: icons[Math.floor(Math.random()*icons.length)]
+                });
+                DB.save();
+                Router.navigate('decks');
+            },
+
+            addCard() {
+                const deckId = document.getElementById('inp-deck-id').value;
+                const front = document.getElementById('inp-front').value;
+                const back = document.getElementById('inp-back').value;
+
+                if (!front) return alert("Savol yozilmadi!");
+                if (UI.currentCardType === 'basic' && !back) return alert("Javob yozilmadi!");
+                if (UI.currentCardType === 'cloze' && !front.includes('{{c1::')) return alert("Cloze format xato! {{c1::javob}} ko'rinishida yozing.");
+
+                DB.state.cards.push(DB.createCard(deckId, front, UI.currentCardType === 'cloze' ? '' : back, UI.currentCardType));
+                DB.save();
+                
+                document.getElementById('inp-front').value = '';
+                document.getElementById('inp-back').value = '';
+                alert("Muvaffaqiyatli qo'shildi!");
+            },
+
+            clearData() {
+                if(confirm("Hamma narsa o'chib ketadi! Aniqmi?")) {
+                    localStorage.removeItem(DB.KEY);
+                    location.reload();
+                }
+            }
+        };
+
+        const StudyController = {
+            isFlipped: false,
+
+            flip() {
+                const card = document.getElementById('active-card');
+                const btnShow = document.getElementById('btn-show');
+                const btnGrading = document.getElementById('btn-grading');
+
+                if (!this.isFlipped) {
+                    card.classList.add('flipped');
+                    btnShow.classList.add('hidden');
+                    btnGrading.classList.remove('hidden');
+                    btnGrading.classList.add('grid');
+                    this.isFlipped = true;
                 }
             },
 
-            openSettings() {
-                const modal = document.getElementById('settings-modal');
-                const panel = document.getElementById('settings-panel');
-                modal.classList.remove('hidden');
-                setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+            rate(cardId, rating, deckId) {
+                const cardIndex = DB.state.cards.findIndex(c => c.id === cardId);
+                if (cardIndex === -1) return;
+
+                // Smart Algorithm Process
+                DB.state.cards[cardIndex] = Algo.process(DB.state.cards[cardIndex], rating);
+                DB.logActivity();
+                DB.save();
+
+                this.isFlipped = false;
+                Router.navigate('study', deckId); // Refresh view for next card
             },
 
-            closeSettings() {
-                const modal = document.getElementById('settings-modal');
-                const panel = document.getElementById('settings-panel');
-                panel.classList.add('translate-x-full');
-                setTimeout(() => modal.classList.add('hidden'), 300);
-            },
-
-            alert(title, message) {
-                const modal = document.getElementById('alert-modal');
-                document.getElementById('alert-title').textContent = title;
-                document.getElementById('alert-message').textContent = message;
-                modal.classList.remove('hidden');
-            },
-
-            closeAlert() {
-                document.getElementById('alert-modal').classList.add('hidden');
+            deleteCard(cardId) {
+                if(!confirm("Bu kartani o'chirmoqchimisiz?")) return;
+                DB.state.cards = DB.state.cards.filter(c => c.id !== cardId);
+                DB.save();
+                // Refresh logic needed, simple way: go back to decks or re-render
+                Router.navigate('decks'); 
             }
         };
 
-        // ═══════════════════════════════════════════════════════════════
-        // 7. DATA MANAGEMENT
-        // ═══════════════════════════════════════════════════════════════
-
-        const DataMgr = {
-            exportJSON() {
-                const dataStr = JSON.stringify(DB.state, null, 2);
-                const dataBlob = new Blob([dataStr], { type: 'application/json' });
-                const url = URL.createObjectURL(dataBlob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `ultra-anki-${Date.now()}.json`;
-                link.click();
-            },
-
-            importJSON() {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = '.json';
-                input.onchange = (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        try {
-                            const imported = JSON.parse(event.target.result);
-                            DB.state = imported;
-                            DB.save();
-                            UI.alert('Muvaffaqiyat', 'Ma\'lumotlar yuklandi');
-                            Router.nav('decks');
-                        } catch (err) {
-                            UI.alert('Xato', 'Fayl noto\'g\'ri format');
-                        }
-                    };
-                    reader.readAsText(file);
-                };
-                input.click();
-            },
-
-            reset() {
-                DB.state = {
-                    user: { xp: 0, level: 1, streak: 0, lastStudy: null, heatmap: {}, totalCards: 0, totalReviews: 0 },
-                    decks: [], 
-                    cards: [],
-                    settings: { cardsPerDay: 20, language: 'uz' }
-                };
-                DB.seed();
-                UI.alert('Muvaffaqiyat', 'Barcha ma\'lumotlar qayta sozlandi');
-                Router.nav('decks');
-            }
-        };
-
-        // ═══════════════════════════════════════════════════════════════
-        // 8. INITIALIZATION
-        // ═══════════════════════════════════════════════════════════════
-
-        document.addEventListener('DOMContentLoaded', () => {
+        // --- INIT ---
+        window.addEventListener('DOMContentLoaded', () => {
             DB.init();
-            Router.nav('decks');
-
-            // Remove keyboard shortcuts on mobile
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if (!isMobile) {
-                // Keyboard shortcuts already added in study view
-            }
-
-            console.log('✅ Ultra Anki Pro v2.5.0 Initialized');
-            console.log(`📚 Total Decks: ${DB.state.decks.length}`);
-            console.log(`🎯 Total Cards: ${DB.state.cards.length}`);
+            UI.updateHeader();
+            Router.navigate('decks');
         });
 
-        // Close modals on Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                UI.closeSettings();
-                UI.closeAlert();
-            }
-        });
-
-        // Handle visibility change to update streak
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                DB.checkStreak();
-            }
-        });
     </script>
-
-    <!-- FOOTER -->
-    <div class="fixed bottom-0 left-0 right-0 text-center text-[10px] text-gray-600 py-2 pointer-events-none z-0 max-w-2xl mx-auto">
-        © Muhammad Daler tomonidan yasalgan
-    </div>
-
 </body>
 </html>
+
