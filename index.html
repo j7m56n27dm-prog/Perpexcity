@@ -1,1943 +1,1058 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Qur'oniy Zukkolik | Hifz Tizimi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Ultra Anki Pro - 2025</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        ios: { blue: '#007AFF', green: '#34C759', red: '#FF3B30', orange: '#FF9500' },
+                        dark: { bg: '#000000', surface: '#1C1C1E', surface2: '#2C2C2E', border: '#38383A' }
+                    },
+                    boxShadow: { 'glow': '0 0 20px rgba(0, 122, 255, 0.4)', 'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.3)' }
+                }
+            }
+        }
+    </script>
 
     <style>
-        :root {
-            --primary: #059669;
-            --primary-dark: #047857;
-            --primary-light: #34d399;
-            --primary-glow: rgba(5, 150, 105, 0.3);
-            --gold: #f59e0b;
-            --gold-light: #fbbf24;
-            --bg: #f8fafc;
-            --bg-secondary: #f1f5f9;
-            --surface: #ffffff;
-            --text: #0f172a;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
-            --border: #e2e8f0;
-            --error: #ef4444;
-            --error-light: #fef2f2;
-            --success: #10b981;
-            --success-light: #ecfdf5;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
-            --shadow-glow: 0 0 40px var(--primary-glow);
-            --font-main: 'Inter', sans-serif;
-            --font-ar: 'Amiri', serif;
-        }
-
-        [data-theme="dark"] {
-            --bg: #0f172a;
-            --bg-secondary: #1e293b;
-            --surface: #1e293b;
-            --text: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #64748b;
-            --border: #334155;
-            --error-light: #450a0a;
-            --success-light: #064e3b;
-            --primary-glow: rgba(52, 211, 153, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: var(--font-main);
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            transition: background 0.4s, color 0.4s;
-            overflow-x: hidden;
-        }
-
-        /* ===== BACKGROUND PATTERN ===== */
-        .bg-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.4;
-            background-image: 
-                radial-gradient(circle at 20% 50%, var(--primary-glow) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 40%);
-        }
-
-        /* ===== CONTAINER ===== */
-        .app-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px 16px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ===== HEADER ===== */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0 30px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-ar);
-            font-size: 1.5rem;
-            color: white;
-            box-shadow: var(--shadow);
-        }
-
-        .logo-text {
-            font-weight: 800;
-            font-size: 1.4rem;
-            color: var(--text);
-        }
-
-        .logo-text span {
-            color: var(--primary);
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .lang-select {
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--text);
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .lang-select:hover { border-color: var(--primary); }
-        .lang-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
-
-        .theme-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--text);
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .theme-btn:hover { border-color: var(--primary); transform: rotate(15deg); }
-
-        /* ===== PAGES/CARDS ===== */
-        .page {
-            display: none;
-            animation: pageIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .page.active { display: block; }
-
-        @keyframes pageIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 28px 24px;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-        }
-
-        /* ===== HOME PAGE ===== */
-        .welcome-section {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .welcome-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            animation: float 3s ease-in-out infinite;
-            box-shadow: var(--shadow-glow);
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .welcome-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .welcome-subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            line-height: 1.6;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        /* Score Display */
-        .score-display {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            padding: 20px;
-            margin: 25px 0;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .score-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .score-value {
-            font-size: 3rem;
-            font-weight: 900;
-            color: var(--gold);
-            text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
-        }
-
-        /* ===== BUTTONS ===== */
-        .btn {
-            width: 100%;
-            padding: 16px 24px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            position: relative;
+        * { -webkit-tap-highlight-color: transparent; }
+        body { 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale; 
+            background-color: #000; 
+            color: #fff; 
+            font-family: 'Inter', sans-serif;
             overflow: hidden;
         }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+        
+        .glass { 
+            background: rgba(28, 28, 30, 0.65); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
         }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #38383A; border-radius: 10px; }
 
-        .btn:active::before { width: 300px; height: 300px; }
-        .btn:active { transform: scale(0.98); }
-        .btn:focus { outline: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes pulse-glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        @keyframes flip { 
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(180deg); }
+        }
+        
+        .animate-enter { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-slide { animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-up { animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-flip { animation: flip 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; }
+        
+        .perspective-1000 { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+        
+        .cloze-answer { 
+            color: #007AFF; 
+            font-weight: 700; 
+            background: rgba(0, 122, 255, 0.15); 
+            padding: 2px 6px; 
+            border-radius: 4px;
+            border-bottom: 2px dashed #007AFF;
+        }
+        
+        .heatmap-grid { display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: 3px; }
+        .heatmap-cell { width: 12px; height: 12px; border-radius: 2px; background-color: #2C2C2E; }
+        .heatmap-cell[data-level="1"] { background-color: #0d47a1; }
+        .heatmap-cell[data-level="2"] { background-color: #1565c0; }
+        .heatmap-cell[data-level="3"] { background-color: #1976d2; }
+        .heatmap-cell[data-level="4"] { background-color: #42a5f5; }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            box-shadow: 0 4px 15px var(--primary-glow);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--primary-glow);
-        }
-
-        .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-gold {
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: #78350f;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-        }
-
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        /* ===== SETTINGS PAGE ===== */
-        .setting-section {
-            margin-bottom: 24px;
-        }
-
-        .setting-label {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .option-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .option-btn {
-            padding: 14px 10px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: var(--surface);
-            color: var(--text);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .option-btn:hover { border-color: var(--primary-light); }
-
-        .option-btn.selected {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px var(--primary-glow);
-        }
-
-        /* Juz Grid */
-        .juz-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 8px;
-            max-height: 280px;
-            overflow-y: auto;
-            padding: 4px;
-        }
-
-        .juz-btn {
-            aspect-ratio: 1;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: var(--surface);
-            color: var(--text);
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .juz-btn:hover { border-color: var(--primary); transform: scale(1.05); }
-        .juz-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
-
-        /* Sheikh Selection */
-        .sheikh-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .sheikh-card {
-            padding: 16px 10px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: var(--surface);
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .sheikh-card:hover { border-color: var(--primary-light); transform: translateY(-2px); }
-
-        .sheikh-card.selected {
-            border-color: var(--primary);
-            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(52, 211, 153, 0.05));
-            box-shadow: 0 4px 15px var(--primary-glow);
-        }
-
-        .sheikh-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--bg-secondary);
-            margin: 0 auto 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .sheikh-card.selected .sheikh-avatar { background: var(--primary); }
-
-        .sheikh-name {
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: var(--text);
-        }
-
-        /* ===== QUIZ PAGE ===== */
-        .progress-bar {
-            height: 6px;
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 16px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            border-radius: 10px;
-            transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .quiz-counter {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .quiz-mode {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 6px 12px;
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            color: var(--primary);
-        }
-
-        .question-text {
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            color: var(--text);
-        }
-
-        /* Ayah Display */
-        .ayah-display {
-            font-family: var(--font-ar);
-            font-size: 2rem;
-            line-height: 2.2;
-            text-align: center;
-            color: var(--text);
-            padding: 24px 16px;
-            margin: 20px 0;
-            direction: rtl;
-            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(52, 211, 153, 0.02));
-            border-radius: var(--radius);
-            border: 1px solid rgba(5, 150, 105, 0.1);
-        }
-
-        /* Audio Player */
-        .audio-player {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            padding: 30px;
-            margin: 20px 0;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-        }
-
-        .play-btn {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            box-shadow: 0 8px 25px var(--primary-glow);
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #007AFF;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
         }
 
-        .play-btn:hover { transform: scale(1.05); }
-        .play-btn:active { transform: scale(0.95); }
-        .play-btn:disabled { background: var(--text-muted); cursor: not-allowed; box-shadow: none; }
-
-        .play-btn.loading {
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
-        .audio-status {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        /* Options */
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .option-item {
-            padding: 18px 20px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: var(--surface);
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 1rem;
-            font-weight: 500;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .option-item:hover:not(.disabled) {
-            border-color: var(--primary-light);
-            transform: translateX(4px);
-        }
-
-        .option-item.ar-text {
-            font-family: var(--font-ar);
-            font-size: 1.4rem;
-            text-align: right;
-            direction: rtl;
-            line-height: 1.8;
-        }
-
-        .option-letter {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--bg-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-        }
-
-        .option-item.correct {
-            background: var(--success-light);
-            border-color: var(--success);
-            animation: correctPulse 0.5s;
-        }
-
-        .option-item.correct .option-letter {
-            background: var(--success);
-            color: white;
-        }
-
-        .option-item.wrong {
-            background: var(--error-light);
-            border-color: var(--error);
-            animation: shake 0.5s;
-        }
-
-        .option-item.wrong .option-letter {
-            background: var(--error);
-            color: white;
-        }
-
-        .option-item.disabled { pointer-events: none; opacity: 0.6; }
-
-        @keyframes correctPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
-        }
-
-        /* Hikmat/Wisdom Box */
-        .hikmat-box {
-            margin-top: 20px;
-            padding: 18px;
-            background: linear-gradient(135deg, var(--gold-light), var(--gold));
-            border-radius: var(--radius-sm);
-            display: none;
-            animation: slideUp 0.4s;
-        }
-
-        .hikmat-box.show { display: block; }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hikmat-title {
-            font-weight: 700;
-            color: #78350f;
-            margin-bottom: 6px;
-            font-size: 0.85rem;
-        }
-
-        .hikmat-text {
-            color: #451a03;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .quiz-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .quiz-actions .btn { flex: 1; }
-
-        .btn-next { display: none; }
-        .btn-next.show { display: flex; }
-
-        /* ===== RESULT PAGE ===== */
-        .result-section {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .result-circle {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            margin: 0 auto 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: 900;
-            position: relative;
-            animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .result-circle.excellent {
-            background: linear-gradient(135deg, var(--success-light), rgba(16, 185, 129, 0.2));
-            color: var(--success);
-            border: 4px solid var(--success);
-        }
-
-        .result-circle.good {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.2));
-            color: var(--gold);
-            border: 4px solid var(--gold);
-        }
-
-        .result-circle.poor {
-            background: linear-gradient(135deg, var(--error-light), rgba(239, 68, 68, 0.2));
-            color: var(--error);
-            border: 4px solid var(--error);
-        }
-
-        @keyframes scaleIn {
-            from { transform: scale(0); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .result-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 24px 0;
-        }
-
-        .stat-box {
-            padding: 16px;
-            border-radius: var(--radius-sm);
-            text-align: center;
-        }
-
-        .stat-box.success {
-            background: var(--success-light);
-            color: var(--success);
-        }
-
-        .stat-box.error {
-            background: var(--error-light);
-            color: var(--error);
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        .result-message {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
-        /* ===== ADVICE PAGE ===== */
-        .advice-list {
-            list-style: none;
-        }
-
-        .advice-item {
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-        }
-
-        .advice-item:last-child { border-bottom: none; }
-
-        .advice-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--bg-secondary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-
-        .advice-text {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text);
-        }
-
-        /* ===== DIVIDER ===== */
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 20px 0;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            margin-top: auto;
-            padding: 20px 0;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* ===== UTILITIES ===== */
-        .hidden { display: none !important; }
-        .mt-20 { margin-top: 20px; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 480px) {
-            .juz-grid { grid-template-columns: repeat(5, 1fr); }
-            .option-grid { grid-template-columns: repeat(3, 1fr); }
-            .sheikh-grid { grid-template-columns: repeat(3, 1fr); }
-            .ayah-display { font-size: 1.6rem; padding: 18px 12px; }
-            .option-item.ar-text { font-size: 1.2rem; }
-        }
+        .nav-btn.active { transform: scale(1.05); }
+        .nav-btn.active > div:first-child { color: #007AFF; }
+        .nav-btn.active > span { color: #007AFF; font-weight: 600; }
     </style>
 </head>
-<body data-theme="light">
-    <div class="bg-pattern"></div>
-    
-    <div class="app-container">
-        <!-- HEADER -->
-        <header class="header">
-            <div class="logo">
-                <div class="logo-icon">ﷻ</div>
-                <div class="logo-text" data-i18n="brand">Qur'on<span>IQ</span></div>
-            </div>
-            <div class="header-actions">
-                <select class="lang-select" id="langSelect" onchange="App.setLanguage(this.value)">
-                    <option value="uz">UZ</option>
-                    <option value="ar">AR</option>
-                    <option value="ru">RU</option>
-                    <option value="en">EN</option>
-                </select>
-                <button class="theme-btn" onclick="App.toggleTheme()" aria-label="Toggle theme">
-                    <span id="themeIcon">🌙</span>
-                </button>
-            </div>
+<body class="h-[100dvh] w-full flex selection:bg-ios-blue selection:text-white">
+
+    <!-- APP CONTAINER -->
+    <div id="app" class="flex-1 flex flex-col relative w-full h-full max-w-2xl mx-auto bg-dark-bg border-x border-dark-border shadow-2xl overflow-hidden">
+        
+        <!-- DYNAMIC HEADER -->
+        <header id="app-header" class="h-14 px-4 flex items-center justify-between glass z-40 fixed top-0 w-full max-w-2xl border-b border-dark-border">
+            <div class="text-lg font-bold">Ultra Anki</div>
+            <div></div>
+            <div></div>
         </header>
 
-        <!-- HOME PAGE -->
-        <main id="pageHome" class="page active">
-            <div class="card">
-                <div class="welcome-section">
-                    <div class="welcome-icon">📖</div>
-                    <h1 class="welcome-title" data-i18n="welcomeTitle">Xush Kelibsiz!</h1>
-                    <p class="welcome-subtitle" data-i18n="welcomeSubtitle">Qur'on hifzini mustahkamlash va bilimingizni sinash uchun mukammal platforma</p>
-                    
-                    <div class="score-display">
-                        <div class="score-label" data-i18n="highScore">Eng yuqori natija</div>
-                        <div class="score-value" id="displayHighScore">0%</div>
-                    </div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="App.navigate('settingsText')">
-                        <span>📝</span>
-                        <span data-i18n="btnTextTest">Matnli Test</span>
-                    </button>
-                    <button class="btn btn-gold" onclick="App.navigate('settingsAudio')">
-                        <span>🎧</span>
-                        <span data-i18n="btnAudioTest">Audio Test</span>
-                    </button>
-                    <button class="btn btn-secondary" onclick="App.navigate('advice')">
-                        <span>💡</span>
-                        <span data-i18n="btnAdvice">Maslahatlar</span>
-                    </button>
-                </div>
-            </div>
+        <!-- MAIN VIEWPORT -->
+        <main id="viewport" class="flex-1 overflow-y-auto overflow-x-hidden pt-16 pb-24 px-4 scroll-smooth">
+            <!-- Content injected here -->
         </main>
 
-        <!-- TEXT TEST SETTINGS -->
-        <section id="pageSettingsText" class="page">
-            <div class="card">
-                <h2 style="text-align: center; color: var(--primary); margin-bottom: 24px;" data-i18n="textTestSettings">Matnli Test Sozlamalari</h2>
+        <!-- TAB BAR (iOS Style) -->
+        <nav class="h-20 glass fixed bottom-0 w-full max-w-2xl z-50 flex items-start justify-around pt-2 border-t border-white/10 safe-bottom">
+            <button onclick="Router.nav('decks')" class="nav-btn group flex flex-col items-center gap-1 w-16 active" data-tab="decks">
+                <div class="text-2xl transition-transform group-active:scale-90"><i class="fa-solid fa-layer-group"></i></div>
+                <span class="text-[10px] font-medium">Qo'plamlar</span>
+            </button>
+            <button onclick="Router.nav('add')" class="nav-btn group flex flex-col items-center gap-1 w-16" data-tab="add">
+                <div class="w-10 h-10 bg-ios-blue rounded-full flex items-center justify-center text-white text-lg shadow-glow transition-transform group-active:scale-90"><i class="fa-solid fa-plus"></i></div>
+                <span class="text-[10px] font-medium text-gray-400">Qo'shish</span>
+            </button>
+            <button onclick="Router.nav('stats')" class="nav-btn group flex flex-col items-center gap-1 w-16" data-tab="stats">
+                <div class="text-2xl transition-transform group-active:scale-90 text-gray-500"><i class="fa-solid fa-chart-line"></i></div>
+                <span class="text-[10px] font-medium text-gray-500">Statistika</span>
+            </button>
+        </nav>
 
-                <div class="setting-section">
-                    <div class="setting-label" data-i18n="difficulty">Qiyinchilik darajasi</div>
-                    <div class="option-grid">
-                        <button class="option-btn" data-diff="easy" onclick="App.setDifficulty('easy')" data-i18n="easy">Oson</button>
-                        <button class="option-btn selected" data-diff="medium" onclick="App.setDifficulty('medium')" data-i18n="medium">O'rta</button>
-                        <button class="option-btn" data-diff="hard" onclick="App.setDifficulty('hard')" data-i18n="hard">Qiyin</button>
+        <!-- SETTINGS OVERLAY -->
+        <div id="settings-modal" class="fixed inset-0 z-[100] hidden">
+            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="UI.closeSettings()"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-3/4 max-w-sm bg-dark-surface border-l border-dark-border shadow-2xl transform transition-transform duration-300 translate-x-full" id="settings-panel">
+                <div class="p-6 pb-32 h-full overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold">Sozlamalar</h2>
+                        <button onclick="UI.closeSettings()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
                     </div>
-                </div>
-
-                <div class="setting-section">
-                    <div class="setting-label" data-i18n="source">Manba tanlovi</div>
-                    <button class="btn btn-primary" onclick="App.startTextTest('full')">
-                        <span>📚</span>
-                        <span data-i18n="fullQuran">Butun Qur'on</span>
-                    </button>
                     
-                    <div class="divider" data-i18n="orSelectJuz">yoki juz tanlang</div>
-                    
-                    <div class="juz-grid" id="juzGridText"></div>
-                </div>
-
-                <button class="btn btn-secondary mt-20" onclick="App.navigate('home')">
-                    <span>←</span>
-                    <span data-i18n="back">Ortga</span>
-                </button>
-            </div>
-        </section>
-
-        <!-- AUDIO TEST SETTINGS -->
-        <section id="pageSettingsAudio" class="page">
-            <div class="card">
-                <h2 style="text-align: center; color: var(--primary); margin-bottom: 24px;" data-i18n="audioTestSettings">Audio Test Sozlamalari</h2>
-
-                <div class="setting-section">
-                    <div class="setting-label" data-i18n="selectSheikh">Qori tanlang</div>
-                    <div class="sheikh-grid" id="sheikhGrid"></div>
-                </div>
-
-                <div class="setting-section">
-                    <div class="setting-label" data-i18n="testType">Test turi</div>
-                    <div class="btn-group">
-                        <button class="btn btn-primary" onclick="App.startAudioTest('surah')">
-                            <span>🔍</span>
-                            <span data-i18n="identifySurah">Surani aniqlash</span>
-                        </button>
-                        <button class="btn btn-gold" onclick="App.startAudioTest('ayah')">
-                            <span>➡️</span>
-                            <span data-i18n="continueAyah">Oyat davomini topish</span>
-                        </button>
-                    </div>
-                </div>
-
-                <button class="btn btn-secondary mt-20" onclick="App.navigate('home')">
-                    <span>←</span>
-                    <span data-i18n="back">Ortga</span>
-                </button>
-            </div>
-        </section>
-
-        <!-- QUIZ PAGE -->
-        <section id="pageQuiz" class="page">
-            <div class="card">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                </div>
-
-                <div class="quiz-header">
-                    <span class="quiz-counter" id="quizCounter">1 / 10</span>
-                    <span class="quiz-mode" id="quizMode">TEST</span>
-                </div>
-
-                <p class="question-text" id="questionText">Savol yuklanmoqda...</p>
-
-                <!-- Audio Player (for audio tests) -->
-                <div class="audio-player hidden" id="audioPlayer">
-                    <button class="play-btn" id="playBtn" onclick="App.playAudio()">
-                        <span id="playIcon">▶️</span>
-                    </button>
-                    <span class="audio-status" id="audioStatus" data-i18n="tapToPlay">Tinglash uchun bosing</span>
-                </div>
-
-                <!-- Ayah Display (for text tests) -->
-                <div class="ayah-display hidden" id="ayahDisplay"></div>
-
-                <!-- Options -->
-                <div class="options-container" id="optionsContainer"></div>
-
-                <!-- Wisdom/Hikmat -->
-                <div class="hikmat-box" id="hikmatBox">
-                    <div class="hikmat-title" data-i18n="hikmatTitle">💫 Qur'oniy hikmat:</div>
-                    <p class="hikmat-text" id="hikmatText"></p>
-                </div>
-
-                <div class="quiz-actions">
-                    <button class="btn btn-secondary" onclick="App.exitQuiz()" style="flex: 0.7;">
-                        <span data-i18n="exit">Chiqish</span>
-                    </button>
-                    <button class="btn btn-primary btn-next" id="btnNext" onclick="App.nextQuestion()">
-                        <span data-i18n="next">Keyingi</span>
-                        <span>→</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- RESULT PAGE -->
-        <section id="pageResult" class="page">
-            <div class="card">
-                <div class="result-section">
-                    <div class="result-circle" id="resultCircle">
-                        <span id="resultPercent">0%</span>
-                    </div>
-
-                    <div class="result-stats">
-                        <div class="stat-box success">
-                            <div class="stat-value" id="resultCorrect">0</div>
-                            <div class="stat-label" data-i18n="correct">To'g'ri</div>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase mb-3 block">Kunlik maqsad</label>
+                            <input type="number" id="daily-goal" min="1" max="100" value="20" class="w-full glass-input p-3 rounded-lg text-sm" placeholder="Kunlik kartalr soni">
                         </div>
-                        <div class="stat-box error">
-                            <div class="stat-value" id="resultWrong">0</div>
-                            <div class="stat-label" data-i18n="wrong">Xato</div>
+
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase mb-3 block">Ma'lumotlar</label>
+                            <button onclick="DataMgr.exportJSON()" class="w-full py-3 bg-dark-surface2 hover:bg-dark-border rounded-lg text-left px-4 text-sm font-medium flex items-center gap-3 transition mb-2">
+                                <i class="fa-solid fa-download text-ios-blue"></i> Zaxiralash (JSON)
+                            </button>
+                            <button onclick="DataMgr.importJSON()" class="w-full py-3 bg-dark-surface2 hover:bg-dark-border rounded-lg text-left px-4 text-sm font-medium flex items-center gap-3 transition mb-2">
+                                <i class="fa-solid fa-upload text-ios-green"></i> Yuklash (JSON)
+                            </button>
+                            <button onclick="if(confirm('Barchasini o\'chirish?\n\nBu amalni bekor qilib bo\'lmaydi!')) DataMgr.reset()" class="w-full py-3 bg-red-900/20 hover:bg-red-900/30 text-red-500 rounded-lg text-left px-4 text-sm font-medium flex items-center gap-3 transition">
+                                <i class="fa-solid fa-trash"></i> Barchasini o'chirish
+                            </button>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase mb-2 block">Haqida</label>
+                            <p class="text-xs text-gray-400 leading-relaxed">
+                                <strong>Ultra Anki Pro v2.5.0</strong><br/>
+                                Engine: SM-2 Enhanced<br/>
+                                <span class="text-ios-blue">Muhammad Daler tomonidan yasalgan</span><br/>
+                                © 2025 All Rights Reserved
+                            </p>
                         </div>
                     </div>
-
-                    <p class="result-message" id="resultMessage">...</p>
-
-                    <div class="btn-group">
-                        <button class="btn btn-primary" onclick="App.navigate('home')">
-                            <span>🏠</span>
-                            <span data-i18n="home">Bosh sahifa</span>
-                        </button>
-                    </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- ADVICE PAGE -->
-        <section id="pageAdvice" class="page">
-            <div class="card">
-                <h2 style="text-align: center; color: var(--primary); margin-bottom: 24px;" data-i18n="adviceTitle">Foydali Maslahatlar</h2>
-                
-                <ul class="advice-list" id="adviceList"></ul>
-
-                <button class="btn btn-secondary mt-20" onclick="App.navigate('home')">
-                    <span>←</span>
-                    <span data-i18n="back">Ortga</span>
-                </button>
+        <!-- ALERT MODAL -->
+        <div id="alert-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center px-4">
+            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+            <div class="relative bg-dark-surface border border-dark-border rounded-2xl p-6 max-w-sm animate-up">
+                <h3 id="alert-title" class="text-lg font-bold mb-2"></h3>
+                <p id="alert-message" class="text-sm text-gray-400 mb-6"></p>
+                <button onclick="UI.closeAlert()" class="w-full py-3 bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-lg transition">OK</button>
             </div>
-        </section>
+        </div>
 
-        <footer class="footer">
-            <p>© 2024 Qur'onIQ — Hifz mustahkamlash platformasi</p>
-        </footer>
     </div>
 
     <script>
-        // ============================================================
-        // TRANSLATIONS DATABASE
-        // ============================================================
-        const I18N = {
+        /**
+         * ╔══════════════════════════════════════════════════════════════╗
+         * ║     ULTRA ANKI PRO - ADVANCED SPACED REPETITION ENGINE      ║
+         * ║                   Architecture v2.5.0                        ║
+         * ╚══════════════════════════════════════════════════════════════╝
+         */
+
+        const LANGUAGE = {
             uz: {
-                brand: "Qur'onIQ",
-                welcomeTitle: "Xush Kelibsiz!",
-                welcomeSubtitle: "Qur'on hifzini mustahkamlash va bilimingizni sinash uchun mukammal platforma",
-                highScore: "Eng yuqori natija",
-                btnTextTest: "Matnli Test",
-                btnAudioTest: "Audio Test",
-                btnAdvice: "Maslahatlar",
-                textTestSettings: "Matnli Test Sozlamalari",
-                audioTestSettings: "Audio Test Sozlamalari",
-                difficulty: "Qiyinchilik darajasi",
-                easy: "Oson",
-                medium: "O'rta",
-                hard: "Qiyin",
-                source: "Manba tanlovi",
-                fullQuran: "Butun Qur'on",
-                orSelectJuz: "yoki juz tanlang",
-                selectSheikh: "Qori tanlang",
-                testType: "Test turi",
-                identifySurah: "Surani aniqlash",
-                continueAyah: "Oyat davomini topish",
-                back: "Ortga",
-                exit: "Chiqish",
-                next: "Keyingi",
-                home: "Bosh sahifa",
-                tapToPlay: "Tinglash uchun bosing",
-                loading: "Yuklanmoqda...",
-                hikmatTitle: "💫 Qur'oniy hikmat:",
-                correct: "To'g'ri",
-                wrong: "Xato",
-                adviceTitle: "Foydali Maslahatlar",
-                questionTextTest: "Quyidagi oyatdan keyingi oyatni toping:",
-                questionAudioSurah: "Bu qaysi sura?",
-                questionAudioAyah: "Eshitgan oyatdan keyin qaysi oyat keladi?",
-                modeText: "MATNLI TEST",
-                modeAudioSurah: "SURANI TOPING",
-                modeAudioAyah: "OYAT DAVOMI",
-                resultPerfect: "MashaAlloh! Mukammal natija! Siz haqiqiy Qur'on ahlidasiz.",
-                resultGreat: "Juda yaxshi! Biroz takrorlash bilan mukammallikka erishasiz.",
-                resultGood: "Yaxshi harakat! Ko'proq mashq qilish kerak.",
-                resultFail: "Hali ko'p ish bor. G'ayrat qiling va takrorlang!",
-                adviceList: [
-                    { icon: "🎯", text: "Ixlos: Qur'onni faqat Alloh roziligi uchun yodlang." },
-                    { icon: "📝", text: "Mutashabihlar: O'xshash oyatlarni alohida daftarga yozing." },
-                    { icon: "🐢", text: "Tartil: Shoshilmang, sifat miqdordan ustun." },
-                    { icon: "🔄", text: "Takror: Har kungi takror hifzni mustahkam qiladi." },
-                    { icon: "🤲", text: "Istig'for: Gunohlar unutishga olib keladi, istig'forni ko'paytiring." }
-                ]
-            },
-            ar: {
-                brand: "القرآنIQ",
-                welcomeTitle: "أهلاً وسهلاً!",
-                welcomeSubtitle: "منصة مثالية لتعزيز حفظ القرآن واختبار معرفتك",
-                highScore: "أعلى نتيجة",
-                btnTextTest: "اختبار نصي",
-                btnAudioTest: "اختبار صوتي",
-                btnAdvice: "نصائح",
-                textTestSettings: "إعدادات الاختبار النصي",
-                audioTestSettings: "إعدادات الاختبار الصوتي",
-                difficulty: "مستوى الصعوبة",
-                easy: "سهل",
-                medium: "متوسط",
-                hard: "صعب",
-                source: "اختيار المصدر",
-                fullQuran: "القرآن كاملاً",
-                orSelectJuz: "أو اختر جزءاً",
-                selectSheikh: "اختر القارئ",
-                testType: "نوع الاختبار",
-                identifySurah: "تحديد السورة",
-                continueAyah: "إكمال الآية",
-                back: "رجوع",
-                exit: "خروج",
-                next: "التالي",
-                home: "الرئيسية",
-                tapToPlay: "اضغط للاستماع",
-                loading: "جاري التحميل...",
-                hikmatTitle: "💫 حكمة قرآنية:",
-                correct: "صحيح",
-                wrong: "خطأ",
-                adviceTitle: "نصائح مفيدة",
-                questionTextTest: "ابحث عن الآية التالية:",
-                questionAudioSurah: "ما هذه السورة؟",
-                questionAudioAyah: "ما الآية التالية بعد ما سمعت؟",
-                modeText: "اختبار نصي",
-                modeAudioSurah: "تحديد السورة",
-                modeAudioAyah: "إكمال الآية",
-                resultPerfect: "ما شاء الله! نتيجة مثالية! أنت من أهل القرآن حقاً.",
-                resultGreat: "ممتاز! مع المراجعة ستصل للكمال.",
-                resultGood: "جهد جيد! تحتاج مزيداً من التدريب.",
-                resultFail: "لا تيأس! استمر في المحاولة والمراجعة.",
-                adviceList: [
-                    { icon: "🎯", text: "الإخلاص: احفظ القرآن ابتغاء مرضاة الله فقط." },
-                    { icon: "📝", text: "المتشابهات: اكتب الآيات المتشابهة في دفتر خاص." },
-                    { icon: "🐢", text: "الترتيل: لا تستعجل، الجودة أهم من الكمية." },
-                    { icon: "🔄", text: "التكرار: المراجعة اليومية تثبت الحفظ." },
-                    { icon: "🤲", text: "الاستغفار: الذنوب سبب النسيان، أكثر من الاستغفار." }
-                ]
-            },
-            ru: {
-                brand: "КоранIQ",
-                welcomeTitle: "Добро пожаловать!",
-                welcomeSubtitle: "Идеальная платформа для закрепления хифза и проверки знаний",
-                highScore: "Лучший результат",
-                btnTextTest: "Текстовый тест",
-                btnAudioTest: "Аудио тест",
-                btnAdvice: "Советы",
-                textTestSettings: "Настройки текстового теста",
-                audioTestSettings: "Настройки аудио теста",
-                difficulty: "Уровень сложности",
-                easy: "Легкий",
-                medium: "Средний",
-                hard: "Сложный",
-                source: "Выбор источника",
-                fullQuran: "Весь Коран",
-                orSelectJuz: "или выберите джуз",
-                selectSheikh: "Выберите чтеца",
-                testType: "Тип теста",
-                identifySurah: "Определить суру",
-                continueAyah: "Продолжить аят",
-                back: "Назад",
-                exit: "Выход",
-                next: "Далее",
-                home: "Главная",
-                tapToPlay: "Нажмите для прослушивания",
-                loading: "Загрузка...",
-                hikmatTitle: "💫 Коранический совет:",
-                correct: "Правильно",
-                wrong: "Ошибки",
-                adviceTitle: "Полезные советы",
-                questionTextTest: "Найдите следующий аят:",
-                questionAudioSurah: "Какая это сура?",
-                questionAudioAyah: "Какой аят следует после услышанного?",
-                modeText: "ТЕКСТОВЫЙ ТЕСТ",
-                modeAudioSurah: "ОПРЕДЕЛИТЬ СУРУ",
-                modeAudioAyah: "ПРОДОЛЖЕНИЕ АЯТА",
-                resultPerfect: "МашаАллах! Идеальный результат! Вы истинный знаток Корана.",
-                resultGreat: "Отлично! С практикой достигнете совершенства.",
-                resultGood: "Хорошая попытка! Нужно больше практики.",
-                resultFail: "Не сдавайтесь! Продолжайте учить и повторять.",
-                adviceList: [
-                    { icon: "🎯", text: "Ихлас: Учите Коран только ради довольства Аллаха." },
-                    { icon: "📝", text: "Муташабихат: Записывайте похожие аяты в отдельную тетрадь." },
-                    { icon: "🐢", text: "Тартиль: Не спешите, качество важнее количества." },
-                    { icon: "🔄", text: "Повторение: Ежедневный обзор укрепляет память." },
-                    { icon: "🤲", text: "Истигфар: Грехи ведут к забыванию, увеличьте истигфар." }
-                ]
+                'decks': 'To\'plamlar',
+                'add': 'Qo\'shish',
+                'stats': 'Statistika',
+                'add_card': 'Karta qo\'shish',
+                'add_deck': 'To\'plam yaratish',
+                'card_front': 'Savol',
+                'card_back': 'Javob',
+                'card_type': 'Karta turi',
+                'basic': 'Oddiy',
+                'cloze': 'Bo\'shliq',
+                'deck_name': 'To\'plam nomi',
+                'start': 'Boshlash',
+                'again': 'Bekor',
+                'hard': 'Qiyin',
+                'good': 'Yaxshi',
+                'easy': 'Oson',
+                'no_cards': 'Kartalar yo\'q',
+                'session_end': 'Sessiya tugadi!',
+                'question': 'Savol',
+                'answer': 'Javob',
+                'loading': 'Yuklanmoqda...',
             },
             en: {
-                brand: "QuranIQ",
-                welcomeTitle: "Welcome!",
-                welcomeSubtitle: "The perfect platform to strengthen your Quran memorization",
-                highScore: "High Score",
-                btnTextTest: "Text Test",
-                btnAudioTest: "Audio Test",
-                btnAdvice: "Advice",
-                textTestSettings: "Text Test Settings",
-                audioTestSettings: "Audio Test Settings",
-                difficulty: "Difficulty Level",
-                easy: "Easy",
-                medium: "Medium",
-                hard: "Hard",
-                source: "Source Selection",
-                fullQuran: "Full Quran",
-                orSelectJuz: "or select a juz",
-                selectSheikh: "Select Reciter",
-                testType: "Test Type",
-                identifySurah: "Identify Surah",
-                continueAyah: "Continue Ayah",
-                back: "Back",
-                exit: "Exit",
-                next: "Next",
-                home: "Home",
-                tapToPlay: "Tap to play",
-                loading: "Loading...",
-                hikmatTitle: "💫 Quranic wisdom:",
-                correct: "Correct",
-                wrong: "Wrong",
-                adviceTitle: "Helpful Advice",
-                questionTextTest: "Find the next ayah:",
-                questionAudioSurah: "Which surah is this?",
-                questionAudioAyah: "What ayah comes after what you heard?",
-                modeText: "TEXT TEST",
-                modeAudioSurah: "IDENTIFY SURAH",
-                modeAudioAyah: "CONTINUE AYAH",
-                resultPerfect: "MashaAllah! Perfect result! You are truly among the people of Quran.",
-                resultGreat: "Excellent! With practice, you'll reach perfection.",
-                resultGood: "Good effort! More practice needed.",
-                resultFail: "Don't give up! Keep learning and reviewing.",
-                adviceList: [
-                    { icon: "🎯", text: "Ikhlas: Memorize Quran solely for Allah's pleasure." },
-                    { icon: "📝", text: "Mutashabihat: Write similar verses in a separate notebook." },
-                    { icon: "🐢", text: "Tartil: Don't rush, quality over quantity." },
-                    { icon: "🔄", text: "Review: Daily revision strengthens memory." },
-                    { icon: "🤲", text: "Istighfar: Sins cause forgetfulness, increase istighfar." }
-                ]
+                'decks': 'Decks',
+                'add': 'Add',
+                'stats': 'Stats',
+                'add_card': 'Add Card',
+                'add_deck': 'Create Deck',
+                'card_front': 'Question',
+                'card_back': 'Answer',
+                'card_type': 'Card Type',
+                'basic': 'Basic',
+                'cloze': 'Cloze',
+                'deck_name': 'Deck Name',
+                'start': 'Start',
+                'again': 'Again',
+                'hard': 'Hard',
+                'good': 'Good',
+                'easy': 'Easy',
+                'no_cards': 'No cards',
+                'session_end': 'Session complete!',
+                'question': 'Question',
+                'answer': 'Answer',
+                'loading': 'Loading...',
             }
         };
 
-        // ============================================================
-        // SHEIKH DATA (for audio tests)
-        // ============================================================
-        const SHEIKHS = [
-            { id: 'alafasy', name: 'Al-Afasy', apiId: 'ar.alafasy', emoji: '🎙️' },
-            { id: 'husary', name: 'Al-Husary', apiId: 'ar.husary', emoji: '📿' },
-            { id: 'minshawi', name: 'Al-Minshawi', apiId: 'ar.minshawi', emoji: '🌙' }
-        ];
+        let currentLang = 'uz';
+        const t = (key) => LANGUAGE[currentLang][key] || key;
 
-        // ============================================================
-        // QURAN DATA - JUZ 30 SURAHS (for demo/quiz)
-        // ============================================================
-        const SURAHS_JUZ30 = [
-            { number: 78, name: 'An-Naba', ar: 'النبأ', ayahs: 40 },
-            { number: 79, name: 'An-Naziat', ar: 'النازعات', ayahs: 46 },
-            { number: 80, name: 'Abasa', ar: 'عبس', ayahs: 42 },
-            { number: 81, name: 'At-Takwir', ar: 'التكوير', ayahs: 29 },
-            { number: 82, name: 'Al-Infitar', ar: 'الانفطار', ayahs: 19 },
-            { number: 83, name: 'Al-Mutaffifin', ar: 'المطففين', ayahs: 36 },
-            { number: 84, name: 'Al-Inshiqaq', ar: 'الانشقاق', ayahs: 25 },
-            { number: 85, name: 'Al-Buruj', ar: 'البروج', ayahs: 22 },
-            { number: 86, name: 'At-Tariq', ar: 'الطارق', ayahs: 17 },
-            { number: 87, name: 'Al-Ala', ar: 'الأعلى', ayahs: 19 },
-            { number: 88, name: 'Al-Ghashiyah', ar: 'الغاشية', ayahs: 26 },
-            { number: 89, name: 'Al-Fajr', ar: 'الفجر', ayahs: 30 },
-            { number: 90, name: 'Al-Balad', ar: 'البلد', ayahs: 20 },
-            { number: 91, name: 'Ash-Shams', ar: 'الشمس', ayahs: 15 },
-            { number: 92, name: 'Al-Layl', ar: 'الليل', ayahs: 21 },
-            { number: 93, name: 'Ad-Duha', ar: 'الضحى', ayahs: 11 },
-            { number: 94, name: 'Ash-Sharh', ar: 'الشرح', ayahs: 8 },
-            { number: 95, name: 'At-Tin', ar: 'التين', ayahs: 8 },
-            { number: 96, name: 'Al-Alaq', ar: 'العلق', ayahs: 19 },
-            { number: 97, name: 'Al-Qadr', ar: 'القدر', ayahs: 5 },
-            { number: 98, name: 'Al-Bayyinah', ar: 'البينة', ayahs: 8 },
-            { number: 99, name: 'Az-Zalzalah', ar: 'الزلزلة', ayahs: 8 },
-            { number: 100, name: 'Al-Adiyat', ar: 'العاديات', ayahs: 11 },
-            { number: 101, name: 'Al-Qariah', ar: 'القارعة', ayahs: 11 },
-            { number: 102, name: 'At-Takathur', ar: 'التكاثر', ayahs: 8 },
-            { number: 103, name: 'Al-Asr', ar: 'العصر', ayahs: 3 },
-            { number: 104, name: 'Al-Humazah', ar: 'الهمزة', ayahs: 9 },
-            { number: 105, name: 'Al-Fil', ar: 'الفيل', ayahs: 5 },
-            { number: 106, name: 'Quraysh', ar: 'قريش', ayahs: 4 },
-            { number: 107, name: 'Al-Maun', ar: 'الماعون', ayahs: 7 },
-            { number: 108, name: 'Al-Kawthar', ar: 'الكوثر', ayahs: 3 },
-            { number: 109, name: 'Al-Kafirun', ar: 'الكافرون', ayahs: 6 },
-            { number: 110, name: 'An-Nasr', ar: 'النصر', ayahs: 3 },
-            { number: 111, name: 'Al-Masad', ar: 'المسد', ayahs: 5 },
-            { number: 112, name: 'Al-Ikhlas', ar: 'الإخلاص', ayahs: 4 },
-            { number: 113, name: 'Al-Falaq', ar: 'الفلق', ayahs: 5 },
-            { number: 114, name: 'An-Nas', ar: 'الناس', ayahs: 6 }
-        ];
+        // ═══════════════════════════════════════════════════════════════
+        // 1. DATABASE & STATE MANAGEMENT
+        // ═══════════════════════════════════════════════════════════════
 
-        // ============================================================
-        // HIKMAT (Wisdom quotes)
-        // ============================================================
-        const HIKMATLAR = {
-            uz: [
-                "Qur'on ahli - Allohning xos bandalari.",
-                "Har kuni bir sahifa - bir yilda Qur'on.",
-                "Sabr va takror - hifzning kaliti.",
-                "Qalbingizni Qur'on bilan yoritib boring.",
-                "Alloh sabrlilar bilan birga."
-            ],
-            ar: [
-                "أهل القرآن هم أهل الله وخاصته.",
-                "صفحة كل يوم - القرآن كاملاً في سنة.",
-                "الصبر والتكرار مفتاح الحفظ.",
-                "أنر قلبك بالقرآن.",
-                "إن الله مع الصابرين."
-            ],
-            ru: [
-                "Люди Корана — особые рабы Аллаха.",
-                "Страница в день — Коран за год.",
-                "Терпение и повторение — ключ к хифзу.",
-                "Освещайте сердце Кораном.",
-                "Аллах с терпеливыми."
-            ],
-            en: [
-                "People of Quran are the special servants of Allah.",
-                "A page a day — Quran in a year.",
-                "Patience and repetition — key to hifz.",
-                "Illuminate your heart with Quran.",
-                "Allah is with the patient."
-            ]
-        };
-
-        // ============================================================
-        // MAIN APP CONTROLLER
-        // ============================================================
-        const App = {
-            // State
+        const DB = {
+            key: 'ultra_anki_pro_db_v2',
             state: {
-                language: 'uz',
-                theme: 'light',
-                difficulty: 'medium',
-                selectedSheikh: SHEIKHS[0],
-                selectedJuz: null,
-                testMode: null, // 'text', 'audio_surah', 'audio_ayah'
-                questions: [],
-                currentIndex: 0,
-                score: 0,
-                totalQuestions: 10,
-                isAnswered: false,
-                highScore: 0,
-                currentAudio: null,
-                ayahCache: {}
+                user: { xp: 0, level: 1, streak: 0, lastStudy: null, heatmap: {}, totalCards: 0, totalReviews: 0 },
+                decks: [], 
+                cards: [],
+                settings: { cardsPerDay: 20, language: 'uz' }
             },
 
-            // Initialize
             init() {
-                // Load saved data
-                this.state.language = localStorage.getItem('quraniq_lang') || 'uz';
-                this.state.theme = localStorage.getItem('quraniq_theme') || 'light';
-                this.state.highScore = parseInt(localStorage.getItem('quraniq_highscore') || '0');
-
-                // Apply
-                document.body.setAttribute('data-theme', this.state.theme);
-                document.getElementById('langSelect').value = this.state.language;
-                document.getElementById('themeIcon').textContent = this.state.theme === 'dark' ? '☀️' : '🌙';
-                document.getElementById('displayHighScore').textContent = this.state.highScore + '%';
-
-                // Render UI
-                this.applyTranslations();
-                this.renderJuzGrid();
-                this.renderSheikhGrid();
-                this.renderAdviceList();
-            },
-
-            // ============ NAVIGATION ============
-            navigate(page) {
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                const pageMap = {
-                    'home': 'pageHome',
-                    'settingsText': 'pageSettingsText',
-                    'settingsAudio': 'pageSettingsAudio',
-                    'quiz': 'pageQuiz',
-                    'result': 'pageResult',
-                    'advice': 'pageAdvice'
-                };
-                document.getElementById(pageMap[page]).classList.add('active');
-                window.scrollTo(0, 0);
-            },
-
-            // ============ LANGUAGE ============
-            setLanguage(lang) {
-                this.state.language = lang;
-                localStorage.setItem('quraniq_lang', lang);
-                document.documentElement.lang = lang;
-                if (lang === 'ar') {
-                    document.body.style.direction = 'rtl';
-                } else {
-                    document.body.style.direction = 'ltr';
-                }
-                this.applyTranslations();
-                this.renderAdviceList();
-            },
-
-            applyTranslations() {
-                const t = I18N[this.state.language];
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    if (t[key]) {
-                        el.textContent = t[key];
-                    }
-                });
-            },
-
-            t(key) {
-                return I18N[this.state.language][key] || key;
-            },
-
-            // ============ THEME ============
-            toggleTheme() {
-                this.state.theme = this.state.theme === 'light' ? 'dark' : 'light';
-                document.body.setAttribute('data-theme', this.state.theme);
-                document.getElementById('themeIcon').textContent = this.state.theme === 'dark' ? '☀️' : '🌙';
-                localStorage.setItem('quraniq_theme', this.state.theme);
-            },
-
-            // ============ SETTINGS ============
-            setDifficulty(diff) {
-                this.state.difficulty = diff;
-                document.querySelectorAll('[data-diff]').forEach(btn => {
-                    btn.classList.toggle('selected', btn.getAttribute('data-diff') === diff);
-                });
-            },
-
-            selectSheikh(sheikhId) {
-                this.state.selectedSheikh = SHEIKHS.find(s => s.id === sheikhId);
-                document.querySelectorAll('.sheikh-card').forEach(card => {
-                    card.classList.toggle('selected', card.getAttribute('data-sheikh') === sheikhId);
-                });
-            },
-
-            selectJuz(juz) {
-                this.state.selectedJuz = juz;
-                document.querySelectorAll('.juz-btn').forEach(btn => {
-                    btn.classList.toggle('selected', parseInt(btn.getAttribute('data-juz')) === juz);
-                });
-                // Start test immediately when juz is selected
-                setTimeout(() => this.startTextTest('juz'), 200);
-            },
-
-            // ============ RENDER FUNCTIONS ============
-            renderJuzGrid() {
-                const container = document.getElementById('juzGridText');
-                container.innerHTML = '';
-                for (let i = 1; i <= 30; i++) {
-                    const btn = document.createElement('button');
-                    btn.className = 'juz-btn';
-                    btn.setAttribute('data-juz', i);
-                    btn.textContent = i;
-                    btn.onclick = () => this.selectJuz(i);
-                    container.appendChild(btn);
-                }
-            },
-
-            renderSheikhGrid() {
-                const container = document.getElementById('sheikhGrid');
-                container.innerHTML = '';
-                SHEIKHS.forEach((sheikh, index) => {
-                    const card = document.createElement('div');
-                    card.className = `sheikh-card ${index === 0 ? 'selected' : ''}`;
-                    card.setAttribute('data-sheikh', sheikh.id);
-                    card.innerHTML = `
-                        <div class="sheikh-avatar">${sheikh.emoji}</div>
-                        <div class="sheikh-name">${sheikh.name}</div>
-                    `;
-                    card.onclick = () => this.selectSheikh(sheikh.id);
-                    container.appendChild(card);
-                });
-            },
-
-            renderAdviceList() {
-                const list = document.getElementById('adviceList');
-                const advices = I18N[this.state.language].adviceList;
-                list.innerHTML = advices.map(a => `
-                    <li class="advice-item">
-                        <div class="advice-icon">${a.icon}</div>
-                        <p class="advice-text">${a.text}</p>
-                    </li>
-                `).join('');
-            },
-
-            // ============ API FUNCTIONS ============
-            async fetchAyah(surahNum, ayahNum) {
-                const cacheKey = `${surahNum}:${ayahNum}`;
-                if (this.state.ayahCache[cacheKey]) {
-                    return this.state.ayahCache[cacheKey];
-                }
-                
-                try {
-                    const response = await fetch(`https://api.alquran.cloud/v1/ayah/${surahNum}:${ayahNum}`);
-                    const data = await response.json();
-                    if (data.code === 200) {
-                        this.state.ayahCache[cacheKey] = data.data;
-                        return data.data;
-                    }
-                } catch (error) {
-                    console.error('API Error:', error);
-                }
-                return null;
-            },
-
-            async fetchSurah(surahNum) {
-                try {
-                    const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}`);
-                    const data = await response.json();
-                    if (data.code === 200) {
-                        return data.data;
-                    }
-                } catch (error) {
-                    console.error('API Error:', error);
-                }
-                return null;
-            },
-
-            getAudioUrl(surahNum, ayahNum) {
-                // Calculate global ayah number
-                const sheikhApi = this.state.selectedSheikh.apiId;
-                return `https://cdn.islamic.network/quran/audio/128/${sheikhApi}/${surahNum}:${ayahNum}.mp3`;
-            },
-
-            getAudioUrlByGlobal(globalAyahNum) {
-                const sheikhApi = this.state.selectedSheikh.apiId;
-                return `https://cdn.islamic.network/quran/audio/128/${sheikhApi}/${globalAyahNum}.mp3`;
-            },
-
-            // ============ GENERATE QUESTIONS ============
-            async generateTextQuestions(source) {
-                const questions = [];
-                const numQuestions = this.state.totalQuestions;
-                
-                // Select surahs based on difficulty and source
-                let targetSurahs = [...SURAHS_JUZ30];
-                if (source === 'juz' && this.state.selectedJuz === 30) {
-                    // Already using juz 30
-                }
-                
-                // Shuffle surahs
-                targetSurahs = this.shuffleArray(targetSurahs);
-
-                for (let i = 0; i < numQuestions && i < targetSurahs.length; i++) {
-                    const surah = targetSurahs[i];
-                    const maxAyah = Math.max(1, surah.ayahs - 1);
-                    const ayahNum = Math.floor(Math.random() * maxAyah) + 1;
-                    
+                const stored = localStorage.getItem(this.key);
+                if (stored) {
                     try {
-                        const currentAyah = await this.fetchAyah(surah.number, ayahNum);
-                        const nextAyah = await this.fetchAyah(surah.number, ayahNum + 1);
-                        
-                        if (currentAyah && nextAyah) {
-                            // Generate wrong options from other ayahs
-                            const wrongOptions = [];
-                            for (let j = 0; j < 3; j++) {
-                                const wrongSurah = targetSurahs[(i + j + 1) % targetSurahs.length];
-                                const wrongAyahNum = Math.floor(Math.random() * wrongSurah.ayahs) + 1;
-                                const wrongAyahData = await this.fetchAyah(wrongSurah.number, wrongAyahNum);
-                                if (wrongAyahData) {
-                                    wrongOptions.push(wrongAyahData.text);
-                                }
-                            }
+                        const parsed = JSON.parse(stored);
+                        this.state = { ...this.state, ...parsed };
+                        currentLang = this.state.settings.language;
+                    } catch (e) {
+                        console.error('DB Corrupt:', e);
+                        this.seed();
+                    }
+                } else {
+                    this.seed();
+                }
+                this.checkStreak();
+            },
 
-                            if (wrongOptions.length >= 3) {
-                                const options = this.shuffleArray([nextAyah.text, ...wrongOptions.slice(0, 3)]);
-                                questions.push({
-                                    type: 'text',
-                                    surah: surah.name,
-                                    surahAr: surah.ar,
-                                    ayahText: currentAyah.text,
-                                    correctAnswer: nextAyah.text,
-                                    options: options,
-                                    correctIndex: options.indexOf(nextAyah.text)
-                                });
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Error generating question:', error);
+            save() {
+                localStorage.setItem(this.key, JSON.stringify(this.state));
+            },
+
+            seed() {
+                const now = Date.now();
+                this.state.decks = [
+                    { id: 'd1', name: 'Ingliz tili - A1', color: 'from-blue-500 to-cyan-500', created: now, description: 'Beginner English' },
+                    { id: 'd2', name: 'Tarix', color: 'from-orange-500 to-red-500', created: now, description: 'Dunyo tarixi' }
+                ];
+                this.state.cards = [
+                    { id: 'c1', deckId: 'd1', front: 'Apple', back: 'Olma', type: 'basic', tags: ['fruit'], srs: this.defaultSRS(), created: now },
+                    { id: 'c2', deckId: 'd1', front: 'Book', back: 'Kitob', type: 'basic', tags: ['basic'], srs: this.defaultSRS(), created: now },
+                    { id: 'c3', deckId: 'd1', front: 'O\'zbekiston poytaxti {{c1::Toshkent}} shahridir.', back: '', type: 'cloze', tags: ['geography'], srs: this.defaultSRS(), created: now },
+                    { id: 'c4', deckId: 'd2', front: 'O\'zbekiston mustaqil davlat bo\'lgan yili:', back: '1991', type: 'basic', tags: ['uzbekistan'], srs: this.defaultSRS(), created: now }
+                ];
+                this.save();
+            },
+
+            defaultSRS() {
+                return { 
+                    interval: 0,
+                    ease: 2.5,
+                    due: Date.now(),
+                    reps: 0,
+                    lapses: 0,
+                    state: 'new'
+                };
+            },
+
+            checkStreak() {
+                const today = new Date().toDateString();
+                const lastStudy = this.state.user.lastStudy;
+                if (lastStudy !== today) {
+                    const yesterday = new Date(Date.now() - 86400000).toDateString();
+                    if (lastStudy !== yesterday) {
+                        this.state.user.streak = 0;
                     }
                 }
-
-                return questions;
-            },
-
-            async generateAudioSurahQuestions() {
-                const questions = [];
-                const targetSurahs = this.shuffleArray([...SURAHS_JUZ30]).slice(0, this.state.totalQuestions);
-
-                for (const surah of targetSurahs) {
-                    const ayahNum = 1; // First ayah
-                    const ayahData = await this.fetchAyah(surah.number, ayahNum);
-                    
-                    if (ayahData) {
-                        // Generate wrong options (other surah names)
-                        const otherSurahs = SURAHS_JUZ30.filter(s => s.number !== surah.number);
-                        const wrongSurahs = this.shuffleArray(otherSurahs).slice(0, 3);
-                        
-                        const options = this.shuffleArray([
-                            { name: surah.name, ar: surah.ar },
-                            ...wrongSurahs.map(s => ({ name: s.name, ar: s.ar }))
-                        ]);
-
-                        questions.push({
-                            type: 'audio_surah',
-                            surah: surah,
-                            ayahNumber: ayahNum,
-                            audioNumber: ayahData.number,
-                            options: options,
-                            correctIndex: options.findIndex(o => o.name === surah.name)
-                        });
-                    }
-                }
-
-                return questions;
-            },
-
-            async generateAudioAyahQuestions() {
-                const questions = [];
-                const targetSurahs = this.shuffleArray([...SURAHS_JUZ30].filter(s => s.ayahs > 2)).slice(0, this.state.totalQuestions);
-
-                for (const surah of targetSurahs) {
-                    const maxAyah = surah.ayahs - 1;
-                    const ayahNum = Math.floor(Math.random() * maxAyah) + 1;
-                    
-                    const currentAyah = await this.fetchAyah(surah.number, ayahNum);
-                    const nextAyah = await this.fetchAyah(surah.number, ayahNum + 1);
-
-                    if (currentAyah && nextAyah) {
-                        // Get wrong options
-                        const wrongOptions = [];
-                        const otherSurahs = this.shuffleArray(SURAHS_JUZ30.filter(s => s.number !== surah.number)).slice(0, 3);
-                        
-                        for (const wrongSurah of otherSurahs) {
-                            const wrongNum = Math.floor(Math.random() * wrongSurah.ayahs) + 1;
-                            const wrongAyah = await this.fetchAyah(wrongSurah.number, wrongNum);
-                            if (wrongAyah) wrongOptions.push(wrongAyah.text);
-                        }
-
-                        if (wrongOptions.length >= 3) {
-                            const options = this.shuffleArray([nextAyah.text, ...wrongOptions.slice(0, 3)]);
-                            questions.push({
-                                type: 'audio_ayah',
-                                surah: surah,
-                                ayahNumber: ayahNum,
-                                audioNumber: currentAyah.number,
-                                correctAnswer: nextAyah.text,
-                                options: options,
-                                correctIndex: options.indexOf(nextAyah.text)
-                            });
-                        }
-                    }
-                }
-
-                return questions;
-            },
-
-            // ============ START TESTS ============
-            async startTextTest(source) {
-                this.state.testMode = 'text';
-                this.state.currentIndex = 0;
-                this.state.score = 0;
-                this.state.isAnswered = false;
-
-                // Show loading
-                this.navigate('quiz');
-                document.getElementById('questionText').textContent = this.t('loading');
-                document.getElementById('optionsContainer').innerHTML = '';
-                document.getElementById('ayahDisplay').classList.remove('hidden');
-                document.getElementById('audioPlayer').classList.add('hidden');
-                document.getElementById('quizMode').textContent = this.t('modeText');
-
-                // Generate questions
-                this.state.questions = await this.generateTextQuestions(source);
-                
-                if (this.state.questions.length > 0) {
-                    this.state.totalQuestions = this.state.questions.length;
-                    this.showQuestion();
-                } else {
-                    alert('Savollar yuklanmadi. Qayta urinib ko\'ring.');
-                    this.navigate('home');
-                }
-            },
-
-            async startAudioTest(type) {
-                this.state.testMode = type === 'surah' ? 'audio_surah' : 'audio_ayah';
-                this.state.currentIndex = 0;
-                this.state.score = 0;
-                this.state.isAnswered = false;
-
-                // Show loading
-                this.navigate('quiz');
-                document.getElementById('questionText').textContent = this.t('loading');
-                document.getElementById('optionsContainer').innerHTML = '';
-                document.getElementById('ayahDisplay').classList.add('hidden');
-                document.getElementById('audioPlayer').classList.remove('hidden');
-                document.getElementById('quizMode').textContent = type === 'surah' ? this.t('modeAudioSurah') : this.t('modeAudioAyah');
-
-                // Generate questions
-                if (type === 'surah') {
-                    this.state.questions = await this.generateAudioSurahQuestions();
-                } else {
-                    this.state.questions = await this.generateAudioAyahQuestions();
-                }
-
-                if (this.state.questions.length > 0) {
-                    this.state.totalQuestions = this.state.questions.length;
-                    this.showQuestion();
-                } else {
-                    alert('Savollar yuklanmadi. Qayta urinib ko\'ring.');
-                    this.navigate('home');
-                }
-            },
-
-            // ============ QUIZ LOGIC ============
-            showQuestion() {
-                const q = this.state.questions[this.state.currentIndex];
-                this.state.isAnswered = false;
-
-                // Update progress
-                const progress = ((this.state.currentIndex) / this.state.totalQuestions) * 100;
-                document.getElementById('progressFill').style.width = progress + '%';
-                document.getElementById('quizCounter').textContent = `${this.state.currentIndex + 1} / ${this.state.totalQuestions}`;
-
-                // Reset UI
-                document.getElementById('hikmatBox').classList.remove('show');
-                document.getElementById('btnNext').classList.remove('show');
-
-                // Set question text
-                if (q.type === 'text') {
-                    document.getElementById('questionText').textContent = this.t('questionTextTest');
-                    document.getElementById('ayahDisplay').textContent = q.ayahText;
-                    document.getElementById('ayahDisplay').classList.remove('hidden');
-                    document.getElementById('audioPlayer').classList.add('hidden');
-                } else if (q.type === 'audio_surah') {
-                    document.getElementById('questionText').textContent = this.t('questionAudioSurah');
-                    document.getElementById('ayahDisplay').classList.add('hidden');
-                    document.getElementById('audioPlayer').classList.remove('hidden');
-                    this.prepareAudio(q.audioNumber);
-                } else if (q.type === 'audio_ayah') {
-                    document.getElementById('questionText').textContent = this.t('questionAudioAyah');
-                    document.getElementById('ayahDisplay').classList.add('hidden');
-                    document.getElementById('audioPlayer').classList.remove('hidden');
-                    this.prepareAudio(q.audioNumber);
-                }
-
-                // Render options
-                const container = document.getElementById('optionsContainer');
-                container.innerHTML = '';
-                
-                const letters = ['A', 'B', 'C', 'D'];
-                q.options.forEach((opt, index) => {
-                    const optEl = document.createElement('div');
-                    optEl.className = 'option-item';
-                    
-                    if (q.type === 'text' || q.type === 'audio_ayah') {
-                        optEl.classList.add('ar-text');
-                        optEl.innerHTML = `<span class="option-letter">${letters[index]}</span><span>${opt}</span>`;
-                    } else {
-                        // Audio surah - show surah name
-                        const displayName = this.state.language === 'ar' ? opt.ar : opt.name;
-                        optEl.innerHTML = `<span class="option-letter">${letters[index]}</span><span>${displayName}</span>`;
-                    }
-                    
-                    optEl.onclick = () => this.selectAnswer(index);
-                    container.appendChild(optEl);
-                });
-            },
-
-            prepareAudio(globalAyahNum) {
-                // Stop any playing audio
-                if (this.state.currentAudio) {
-                    this.state.currentAudio.pause();
-                    this.state.currentAudio = null;
-                }
-
-                const playBtn = document.getElementById('playBtn');
-                const audioStatus = document.getElementById('audioStatus');
-                
-                playBtn.disabled = false;
-                playBtn.classList.remove('loading');
-                document.getElementById('playIcon').textContent = '▶️';
-                audioStatus.textContent = this.t('tapToPlay');
-
-                // Preload audio
-                const audioUrl = this.getAudioUrlByGlobal(globalAyahNum);
-                this.state.currentAudio = new Audio(audioUrl);
-                
-                this.state.currentAudio.addEventListener('ended', () => {
-                    document.getElementById('playIcon').textContent = '▶️';
-                    audioStatus.textContent = this.t('tapToPlay');
-                });
-            },
-
-            playAudio() {
-                if (!this.state.currentAudio) return;
-
-                const playBtn = document.getElementById('playBtn');
-                const audioStatus = document.getElementById('audioStatus');
-
-                if (this.state.currentAudio.paused) {
-                    playBtn.classList.add('loading');
-                    audioStatus.textContent = this.t('loading');
-                    
-                    this.state.currentAudio.play().then(() => {
-                        playBtn.classList.remove('loading');
-                        document.getElementById('playIcon').textContent = '⏸️';
-                        audioStatus.textContent = '...';
-                    }).catch(err => {
-                        console.error('Audio error:', err);
-                        playBtn.classList.remove('loading');
-                        audioStatus.textContent = 'Xatolik';
-                    });
-                } else {
-                    this.state.currentAudio.pause();
-                    document.getElementById('playIcon').textContent = '▶️';
-                    audioStatus.textContent = this.t('tapToPlay');
-                }
-            },
-
-            selectAnswer(selectedIndex) {
-                if (this.state.isAnswered) return;
-                this.state.isAnswered = true;
-
-                const q = this.state.questions[this.state.currentIndex];
-                const options = document.querySelectorAll('.option-item');
-                
-                // Disable all options
-                options.forEach(opt => opt.classList.add('disabled'));
-
-                // Mark correct/wrong
-                if (selectedIndex === q.correctIndex) {
-                    options[selectedIndex].classList.add('correct');
-                    this.state.score++;
-                } else {
-                    options[selectedIndex].classList.add('wrong');
-                    options[q.correctIndex].classList.add('correct');
-                }
-
-                // Show hikmat
-                const hikmatList = HIKMATLAR[this.state.language];
-                const randomHikmat = hikmatList[Math.floor(Math.random() * hikmatList.length)];
-                document.getElementById('hikmatText').textContent = randomHikmat;
-                document.getElementById('hikmatBox').classList.add('show');
-
-                // Show next button
-                document.getElementById('btnNext').classList.add('show');
-            },
-
-            nextQuestion() {
-                this.state.currentIndex++;
-                
-                if (this.state.currentIndex >= this.state.totalQuestions) {
-                    this.showResult();
-                } else {
-                    this.showQuestion();
-                }
-            },
-
-            showResult() {
-                // Stop audio
-                if (this.state.currentAudio) {
-                    this.state.currentAudio.pause();
-                    this.state.currentAudio = null;
-                }
-
-                const percent = Math.round((this.state.score / this.state.totalQuestions) * 100);
-                
-                // Update high score
-                if (percent > this.state.highScore) {
-                    this.state.highScore = percent;
-                    localStorage.setItem('quraniq_highscore', percent);
-                    document.getElementById('displayHighScore').textContent = percent + '%';
-                }
-
-                // Navigate to result page
-                this.navigate('result');
-
-                // Update result UI
-                document.getElementById('resultPercent').textContent = percent + '%';
-                document.getElementById('resultCorrect').textContent = this.state.score;
-                document.getElementById('resultWrong').textContent = this.state.totalQuestions - this.state.score;
-
-                // Result circle styling
-                const circle = document.getElementById('resultCircle');
-                circle.classList.remove('excellent', 'good', 'poor');
-                
-                let message = '';
-                if (percent >= 90) {
-                    circle.classList.add('excellent');
-                    message = this.t('resultPerfect');
-                } else if (percent >= 70) {
-                    circle.classList.add('good');
-                    message = this.t('resultGreat');
-                } else if (percent >= 50) {
-                    circle.classList.add('good');
-                    message = this.t('resultGood');
-                } else {
-                    circle.classList.add('poor');
-                    message = this.t('resultFail');
-                }
-                
-                document.getElementById('resultMessage').textContent = message;
-            },
-
-            exitQuiz() {
-                // Stop audio
-                if (this.state.currentAudio) {
-                    this.state.currentAudio.pause();
-                    this.state.currentAudio = null;
-                }
-                this.navigate('home');
-            },
-
-            // ============ UTILITY ============
-            shuffleArray(array) {
-                const arr = [...array];
-                for (let i = arr.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [arr[i], arr[j]] = [arr[j], arr[i]];
-                }
-                return arr;
             }
         };
 
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', () => App.init());
+        // ═══════════════════════════════════════════════════════════════
+        // 2. ADVANCED SRS ALGORITHM (SM-2 ENHANCED)
+        // ═══════════════════════════════════════════════════════════════
+
+        const SRS = {
+            /**
+             * Process card response based on rating (1-4)
+             * 1 = Again (Fail)
+             * 2 = Hard 
+             * 3 = Good
+             * 4 = Easy
+             */
+            updateCard(card, rating) {
+                const now = Date.now();
+                let { interval, ease, reps, lapses } = card.srs;
+
+                if (rating === 1) {
+                    // Reset on failure
+                    interval = 0;
+                    reps = 0;
+                    lapses++;
+                    card.srs.state = 'learning';
+                } else {
+                    // Increase reps on success
+                    if (reps === 0) interval = 1;
+                    else if (reps === 1) interval = 6;
+                    else {
+                        let modifier = 1;
+                        if (rating === 2) modifier = 0.8;
+                        if (rating === 4) modifier = 1.2;
+                        interval = Math.max(1, Math.round(interval * ease * modifier));
+                    }
+                    
+                    reps++;
+                    card.srs.state = reps < 2 ? 'learning' : 'review';
+                }
+
+                // Ease Factor (SM-2 Formula)
+                if (rating === 1) ease = Math.max(1.3, ease - 0.3);
+                else if (rating === 2) ease = Math.max(1.3, ease - 0.15);
+                else if (rating === 4) ease = Math.min(2.8, ease + 0.15);
+                
+                // Calculate next due date
+                const dayMs = 86400000;
+                let dueOffset = 0;
+                if (rating === 1) dueOffset = 60000; // 1 minute
+                else dueOffset = interval * dayMs;
+
+                card.srs = { interval, ease, reps, lapses, due: now + dueOffset, state: card.srs.state };
+                return card;
+            },
+
+            getDue(deckId) {
+                const now = Date.now();
+                return DB.state.cards
+                    .filter(c => c.deckId === deckId && c.srs.due <= now)
+                    .sort((a, b) => a.srs.due - b.srs.due);
+            },
+
+            getAllDue() {
+                const now = Date.now();
+                return DB.state.cards
+                    .filter(c => c.srs.due <= now)
+                    .sort((a, b) => a.srs.due - b.srs.due);
+            }
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // 3. UI RENDERING ENGINE
+        // ═══════════════════════════════════════════════════════════════
+
+        const Router = {
+            activeView: 'decks',
+            params: {},
+
+            nav(view, params = {}) {
+                this.activeView = view;
+                this.params = params;
+
+                // Update nav buttons
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.tab === view) btn.classList.add('active');
+                });
+
+                this.render();
+            },
+
+            render() {
+                const container = document.getElementById('viewport');
+                const header = document.getElementById('app-header');
+
+                // ━━━ DECKS VIEW ━━━
+                if (this.activeView === 'decks') {
+                    header.innerHTML = `
+                        <h1 class="text-lg font-bold">${t('decks')}</h1>
+                        <div></div>
+                        <button onclick="UI.openSettings()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-gear text-lg"></i></button>
+                    `;
+
+                    const totalDue = DB.state.decks.reduce((sum, d) => sum + SRS.getDue(d.id).length, 0);
+                    const totalCards = DB.state.cards.length;
+
+                    let html = `<div class="animate-enter space-y-6">`;
+
+                    // Hero Card
+                    html += `
+                        <div class="mt-2 p-6 rounded-3xl bg-gradient-to-br from-dark-surface to-dark-surface2 border border-dark-border">
+                            <div class="flex justify-between items-end mb-4">
+                                <div>
+                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Takrorlashga tayyor</p>
+                                    <h2 class="text-5xl font-extrabold text-white">${totalDue}</h2>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Streak</p>
+                                    <div class="flex items-center gap-2 justify-end">
+                                        <i class="fa-solid fa-fire text-orange-500 text-xl"></i>
+                                        <span class="text-2xl font-bold">${DB.state.user.streak}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full bg-dark-bg/30 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-ios-blue to-cyan-500 h-full rounded-full transition-all" style="width: ${Math.min(100, (totalDue / DB.state.settings.cardsPerDay) * 100)}%"></div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Decks List
+                    html += `<h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">To'plamlar</h3>`;
+                    html += `<div class="space-y-3">`;
+
+                    DB.state.decks.forEach(deck => {
+                        const due = SRS.getDue(deck.id).length;
+                        const total = DB.state.cards.filter(c => c.deckId === deck.id).length;
+                        const deckColor = deck.color || 'from-blue-500 to-cyan-500';
+                        
+                        html += `
+                            <div onclick="Router.nav('study_intro', {deckId: '${deck.id}'})" class="group relative overflow-hidden bg-dark-surface hover:bg-dark-surface2 border border-dark-border p-4 rounded-2xl flex items-center justify-between transition-all duration-200 active:scale-95 cursor-pointer">
+                                <div class="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b ${deckColor} opacity-80"></div>
+                                <div class="pl-3 flex-1">
+                                    <h4 class="text-base font-bold text-white group-hover:text-ios-blue transition-colors">${deck.name}</h4>
+                                    <p class="text-xs text-gray-400 font-mono mt-1">${total} karta ${due > 0 ? `• <span class="text-ios-green font-bold">${due} due</span>` : ''}</p>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-dark-bg flex items-center justify-center text-gray-500"><i class="fa-solid fa-chevron-right text-xs"></i></div>
+                            </div>
+                        `;
+                    });
+
+                    html += `</div></div>`;
+                    container.innerHTML = html;
+                }
+
+                // ━━━ ADD VIEW ━━━
+                else if (this.activeView === 'add') {
+                    header.innerHTML = `
+                        <h1 class="text-lg font-bold">${t('add')}</h1>
+                        <div></div>
+                        <button onclick="Router.nav('decks')" class="text-ios-blue font-medium text-sm">Bekor</button>
+                    `;
+
+                    const deckOptions = DB.state.decks.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+
+                    container.innerHTML = `
+                        <div class="animate-enter space-y-6 mt-2">
+                            <div class="flex p-1 bg-dark-surface rounded-xl border border-dark-border">
+                                <button onclick="UI.toggleAddMode('card')" id="tab-card" class="flex-1 py-2 text-xs font-bold rounded-lg bg-dark-surface2 text-white shadow-sm">Karta</button>
+                                <button onclick="UI.toggleAddMode('deck')" id="tab-deck" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400">To'plam</button>
+                            </div>
+
+                            <!-- CARD FORM -->
+                            <div id="form-card" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">TO'PLAM</label>
+                                    <select id="inp-deck" class="w-full glass-input p-3 rounded-lg outline-none text-sm">
+                                        ${deckOptions}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">KARTA TURI</label>
+                                    <div class="flex gap-2">
+                                        <button onclick="UI.setCardType('basic')" id="btn-type-basic" class="flex-1 py-2 bg-ios-blue/20 text-ios-blue border border-ios-blue/50 rounded-lg text-xs font-bold">Oddiy</button>
+                                        <button onclick="UI.setCardType('cloze')" id="btn-type-cloze" class="flex-1 py-2 bg-dark-surface border border-dark-border text-gray-400 rounded-lg text-xs font-bold">Bo'shliq</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">SAVOL / MATN</label>
+                                    <textarea id="inp-front" rows="4" class="w-full glass-input p-3 rounded-lg outline-none text-sm resize-none" placeholder="Savolni kiriting..."></textarea>
+                                    <p id="help-cloze" class="hidden text-[10px] text-gray-400 mt-2">Yashirish uchun: {{c1::so'z}}</p>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">JAVOB</label>
+                                    <textarea id="inp-back" rows="3" id="inp-back-text" class="w-full glass-input p-3 rounded-lg outline-none text-sm resize-none" placeholder="Javobni kiriting..."></textarea>
+                                </div>
+
+                                <button onclick="Actions.addCard()" class="w-full py-4 bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-xl shadow-glow transition active:scale-95">
+                                    Qo'shish
+                                </button>
+                            </div>
+
+                            <!-- DECK FORM -->
+                            <div id="form-deck" class="hidden space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">TO'PLAM NOMI</label>
+                                    <input type="text" id="inp-deck-name" class="w-full glass-input p-3 rounded-lg outline-none text-sm" placeholder="Masalan: Fizika">
+                                </div>
+                                <button onclick="Actions.addDeck()" class="w-full py-4 bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-xl shadow-glow transition active:scale-95">
+                                    To'plam Yaratish
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // ━━━ STATS VIEW ━━━
+                else if (this.activeView === 'stats') {
+                    header.innerHTML = `
+                        <h1 class="text-lg font-bold">Statistika</h1>
+                        <div></div>
+                        <button onclick="UI.openSettings()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-gear text-lg"></i></button>
+                    `;
+
+                    const user = DB.state.user;
+                    const totalCards = DB.state.cards.length;
+                    const level = Math.floor(user.xp / 100) + 1;
+
+                    // Generate heatmap
+                    let heatmapHTML = '';
+                    for (let i = 0; i < 84; i++) {
+                        const dateStr = new Date(Date.now() - i * 86400000).toISOString().split('T')[0];
+                        const activity = user.heatmap[dateStr] || 0;
+                        let level = 0;
+                        if (activity > 0) level = Math.min(4, Math.ceil(activity / 5));
+                        heatmapHTML += `<div class="heatmap-cell" data-level="${level}" title="${dateStr}: ${activity} reviews"></div>`;
+                    }
+
+                    container.innerHTML = `
+                        <div class="animate-enter space-y-6 mt-2">
+                            <div class="flex items-center gap-4 p-6 rounded-2xl bg-dark-surface border border-dark-border">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-ios-blue to-purple-600 flex items-center justify-center text-3xl shadow-glow">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-bold">Foydalanuvchi</h2>
+                                    <p class="text-sm text-gray-400">Level ${level} • ${user.xp} XP</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xs font-bold text-gray-500 uppercase mb-3">Faollik (Heatmap)</h3>
+                                <div class="glass p-4 rounded-2xl overflow-x-auto">
+                                    <div class="heatmap-grid">
+                                        ${heatmapHTML}
+                                    </div>
+                                    <div class="flex justify-between text-[10px] text-gray-500 mt-3">
+                                        <span>Kam</span>
+                                        <span>Ko'p</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="bg-dark-surface p-4 rounded-2xl border border-dark-border text-center">
+                                    <i class="fa-solid fa-fire text-ios-orange text-2xl mb-2"></i>
+                                    <h3 class="text-lg font-bold">${user.streak}</h3>
+                                    <p class="text-xs text-gray-500">Kunlik Streak</p>
+                                </div>
+                                <div class="bg-dark-surface p-4 rounded-2xl border border-dark-border text-center">
+                                    <i class="fa-solid fa-brain text-ios-blue text-2xl mb-2"></i>
+                                    <h3 class="text-lg font-bold">${totalCards}</h3>
+                                    <p class="text-xs text-gray-500">Jami Kartalar</p>
+                                </div>
+                                <div class="bg-dark-surface p-4 rounded-2xl border border-dark-border text-center">
+                                    <i class="fa-solid fa-check text-ios-green text-2xl mb-2"></i>
+                                    <h3 class="text-lg font-bold">${user.totalReviews}</h3>
+                                    <p class="text-xs text-gray-500">Ko'rib chiqildi</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-dark-surface p-4 rounded-2xl border border-dark-border">
+                                <h3 class="text-sm font-bold mb-3">O'qish Tezligi</h3>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-gray-400">Bugun</span>
+                                        <span class="font-bold text-ios-blue">${user.heatmap[new Date().toISOString().split('T')[0]] || 0} karta</span>
+                                    </div>
+                                    <div class="w-full bg-dark-bg rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-ios-blue to-cyan-500 h-full rounded-full" style="width: ${Math.min(100, ((user.heatmap[new Date().toISOString().split('T')[0]] || 0) / 20) * 100)}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // ━━━ STUDY INTRO ━━━
+                else if (this.activeView === 'study_intro') {
+                    const deck = DB.state.decks.find(d => d.id === this.params.deckId);
+                    if (!deck) return Router.nav('decks');
+
+                    const due = SRS.getDue(deck.id);
+                    const deckColor = deck.color || 'from-blue-500 to-cyan-500';
+
+                    header.innerHTML = `
+                        <button onclick="Router.nav('decks')" class="text-ios-blue text-sm font-medium flex items-center gap-1"><i class="fa-solid fa-chevron-left"></i> Orqaga</button>
+                        <div></div>
+                        <div></div>
+                    `;
+
+                    container.innerHTML = `
+                        <div class="h-full flex flex-col justify-center items-center text-center animate-enter">
+                            <div class="w-24 h-24 rounded-3xl bg-gradient-to-br ${deckColor} flex items-center justify-center text-5xl shadow-glow mb-6">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <h2 class="text-3xl font-extrabold mb-2">${deck.name}</h2>
+                            <p class="text-gray-400 mb-8">${due.length} ta karta takrorlashga tayyor</p>
+                            
+                            <button onclick="Study.start('${deck.id}')" class="w-full max-w-xs py-4 bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-2xl shadow-glow text-lg transition active:scale-95 mb-4">
+                                Boshlash
+                            </button>
+                            <button onclick="Router.nav('decks')" class="text-gray-500 font-medium text-sm hover:text-white transition">Keyinroq</button>
+                        </div>
+                    `;
+                }
+
+                // ━━━ STUDY SESSION ━━━
+                else if (this.activeView === 'study_session') {
+                    header.innerHTML = `
+                        <button onclick="if(confirm('Sessiyani tugatish?')) Router.nav('decks')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        <span id="study-count" class="text-xs font-bold text-gray-400">0 qoldi</span>
+                        <div></div>
+                    `;
+
+                    container.innerHTML = `
+                        <div class="h-full flex flex-col pt-4 pb-4">
+                            <div class="flex-1 relative perspective-1000 group">
+                                <div id="active-card" class="w-full h-full relative preserve-3d transition-transform duration-500 rounded-3xl shadow-2xl cursor-pointer" onclick="Study.flip()">
+                                    
+                                    <!-- FRONT -->
+                                    <div class="absolute inset-0 backface-hidden bg-dark-surface border border-dark-border rounded-3xl flex flex-col items-center justify-center p-8 text-center">
+                                        <div class="absolute top-4 left-4">
+                                            <span id="card-tag" class="px-3 py-1 rounded-full bg-ios-blue/20 text-ios-blue text-[10px] font-bold uppercase tracking-widest">Savol</span>
+                                        </div>
+                                        <div id="card-front-content" class="text-2xl font-medium leading-relaxed"></div>
+                                        <p class="absolute bottom-8 text-xs text-gray-500 opacity-70">Ko'rish uchun bosing</p>
+                                    </div>
+
+                                    <!-- BACK -->
+                                    <div class="absolute inset-0 backface-hidden rotate-y-180 bg-dark-surface2 border border-dark-border rounded-3xl flex flex-col items-center justify-center p-8 text-center">
+                                        <div class="text-gray-500 text-sm mb-6 opacity-50" id="card-front-ref"></div>
+                                        <div id="card-back-content" class="text-3xl font-bold text-white leading-relaxed"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="h-24 mt-6 relative">
+                                <button id="btn-show" onclick="Study.flip()" class="absolute inset-0 w-full bg-ios-blue hover:bg-blue-600 text-white font-bold rounded-2xl shadow-glow text-lg transition active:scale-95">
+                                    Javobni Ko'rsatish
+                                </button>
+                                
+                                <div id="grading-grid" class="hidden grid grid-cols-4 gap-2 h-full animate-up">
+                                    <button onclick="Study.rate(1)" class="flex flex-col items-center justify-center bg-dark-surface border border-ios-red/30 text-ios-red rounded-xl hover:bg-ios-red/10 active:scale-95 transition text-xs font-bold">
+                                        <span>Again</span>
+                                        <span class="text-[9px] opacity-60">1m</span>
+                                    </button>
+                                    <button onclick="Study.rate(2)" class="flex flex-col items-center justify-center bg-dark-surface border border-ios-orange/30 text-ios-orange rounded-xl hover:bg-ios-orange/10 active:scale-95 transition text-xs font-bold">
+                                        <span>Hard</span>
+                                        <span class="text-[9px] opacity-60">6m</span>
+                                    </button>
+                                    <button onclick="Study.rate(3)" class="flex flex-col items-center justify-center bg-dark-surface border border-ios-green/30 text-ios-green rounded-xl hover:bg-ios-green/10 active:scale-95 transition text-xs font-bold">
+                                        <span>Good</span>
+                                        <span class="text-[9px] opacity-60">10m</span>
+                                    </button>
+                                    <button onclick="Study.rate(4)" class="flex flex-col items-center justify-center bg-dark-surface border border-ios-blue/30 text-ios-blue rounded-xl hover:bg-ios-blue/10 active:scale-95 transition text-xs font-bold">
+                                        <span>Easy</span>
+                                        <span class="text-[9px] opacity-60">4d</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Keyboard shortcuts
+                    document.onkeydown = (e) => {
+                        if (Router.activeView !== 'study_session') return;
+                        if (e.code === 'Space') { e.preventDefault(); Study.flip(); }
+                        if (Study.isFlipped) {
+                            if (e.key === '1') Study.rate(1);
+                            if (e.key === '2') Study.rate(2);
+                            if (e.key === '3') Study.rate(3);
+                            if (e.key === '4') Study.rate(4);
+                        }
+                    };
+                }
+            }
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // 4. STUDY CONTROLLER
+        // ═══════════════════════════════════════════════════════════════
+
+        const Study = {
+            queue: [],
+            current: null,
+            isFlipped: false,
+            startTime: null,
+
+            start(deckId) {
+                this.queue = SRS.getDue(deckId);
+                if (this.queue.length === 0) {
+                    UI.alert('Kartalar yo\'q', 'Bu to\'plamda takrorlashga tayyar kartalar yo\'q');
+                    return;
+                }
+                this.startTime = Date.now();
+                Router.nav('study_session');
+                this.next();
+            },
+
+            next() {
+                if (this.queue.length === 0) {
+                    const sessionDuration = Math.round((Date.now() - this.startTime) / 1000);
+                    UI.alert('Sessiya tugadi!', `Siz ${DB.state.cards.filter(c => c.srs.due <= Date.now()).length} kartani o'qib chiqdingiz\n⏱️ Vaqt: ${sessionDuration}s`);
+                    Router.nav('decks');
+                    return;
+                }
+
+                this.current = this.queue[0];
+                this.isFlipped = false;
+
+                document.getElementById('study-count').innerText = this.queue.length;
+                document.getElementById('active-card').classList.remove('rotate-y-180');
+                document.getElementById('btn-show').classList.remove('hidden');
+                document.getElementById('grading-grid').classList.add('hidden');
+                document.getElementById('grading-grid').classList.remove('grid');
+
+                // Render card content
+                const cardFront = document.getElementById('card-front-content');
+                const cardBack = document.getElementById('card-back-content');
+                const cardTag = document.getElementById('card-tag');
+                const cardFrontRef = document.getElementById('card-front-ref');
+
+                if (this.current.type === 'cloze') {
+                    cardTag.textContent = 'BO\'SHLIQ';
+                    cardFront.innerHTML = this.current.front.replace(/\{\{c\d::(.+?)\}\}/g, '<span class="cloze-answer">•••</span>');
+                    cardBack.innerHTML = this.current.front.replace(/\{\{c\d::(.+?)\}\}/g, '<span class="cloze-answer">$1</span>');
+                    cardFrontRef.innerHTML = '';
+                } else {
+                    cardTag.textContent = 'SAVOL';
+                    cardFront.textContent = this.current.front;
+                    cardBack.textContent = this.current.back;
+                    cardFrontRef.textContent = this.current.front;
+                }
+            },
+
+            flip() {
+                this.isFlipped = !this.isFlipped;
+                const card = document.getElementById('active-card');
+                
+                if (this.isFlipped) {
+                    card.classList.add('rotate-y-180');
+                    document.getElementById('btn-show').classList.add('hidden');
+                    document.getElementById('grading-grid').classList.remove('hidden');
+                    document.getElementById('grading-grid').classList.add('grid');
+                } else {
+                    card.classList.remove('rotate-y-180');
+                    document.getElementById('btn-show').classList.remove('hidden');
+                    document.getElementById('grading-grid').classList.add('hidden');
+                    document.getElementById('grading-grid').classList.remove('grid');
+                }
+            },
+
+            rate(rating) {
+                if (!this.current) return;
+
+                // Update card SRS
+                SRS.updateCard(this.current, rating);
+
+                // Update user stats
+                const today = new Date().toISOString().split('T')[0];
+                DB.state.user.heatmap[today] = (DB.state.user.heatmap[today] || 0) + 1;
+                DB.state.user.totalReviews++;
+                DB.state.user.xp += rating * 10;
+                DB.state.user.lastStudy = new Date().toDateString();
+                if (!DB.state.user.streak) DB.state.user.streak = 1;
+
+                // Remove from queue and move to next
+                this.queue.shift();
+                DB.save();
+                this.next();
+            }
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // 5. ACTIONS & HANDLERS
+        // ═══════════════════════════════════════════════════════════════
+
+        const Actions = {
+            addCard() {
+                const front = document.getElementById('inp-front').value.trim();
+                const back = document.getElementById('inp-back').value.trim();
+                const deckId = document.getElementById('inp-deck').value;
+                const cardType = document.getElementById('inp-front').dataset.cardType || 'basic';
+
+                if (!front) { UI.alert('Xato', 'Savolni kiriting'); return; }
+                if (cardType === 'basic' && !back) { UI.alert('Xato', 'Javobni kiriting'); return; }
+
+                const newCard = {
+                    id: 'c' + Date.now(),
+                    deckId: deckId,
+                    front: front,
+                    back: back,
+                    type: cardType,
+                    tags: [],
+                    srs: DB.defaultSRS(),
+                    created: Date.now()
+                };
+
+                DB.state.cards.push(newCard);
+                DB.save();
+
+                document.getElementById('inp-front').value = '';
+                document.getElementById('inp-back').value = '';
+                
+                UI.alert('Muvaffaqiyat', 'Karta qo\'shildi');
+                Router.nav('decks');
+            },
+
+            addDeck() {
+                const name = document.getElementById('inp-deck-name').value.trim();
+                if (!name) { UI.alert('Xato', 'To\'plam nomini kiriting'); return; }
+
+                const colors = ['from-blue-500 to-cyan-500', 'from-orange-500 to-red-500', 'from-green-500 to-emerald-500', 'from-purple-500 to-pink-500'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                const newDeck = {
+                    id: 'd' + Date.now(),
+                    name: name,
+                    color: color,
+                    created: Date.now(),
+                    description: ''
+                };
+
+                DB.state.decks.push(newDeck);
+                DB.save();
+
+                document.getElementById('inp-deck-name').value = '';
+                UI.alert('Muvaffaqiyat', 'To\'plam yaratildi');
+                Router.nav('decks');
+            },
+
+            deleteDeck(deckId) {
+                if (!confirm('Bu to\'plamni o\'chirish?\n\nUndagi barcha kartalar ham o\'chiriladi!')) return;
+
+                DB.state.decks = DB.state.decks.filter(d => d.id !== deckId);
+                DB.state.cards = DB.state.cards.filter(c => c.deckId !== deckId);
+                DB.save();
+                Router.nav('decks');
+            }
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // 6. UI UTILITIES
+        // ═══════════════════════════════════════════════════════════════
+
+        const UI = {
+            toggleAddMode(mode) {
+                const formCard = document.getElementById('form-card');
+                const formDeck = document.getElementById('form-deck');
+                const tabCard = document.getElementById('tab-card');
+                const tabDeck = document.getElementById('tab-deck');
+                const helpCloze = document.getElementById('help-cloze');
+
+                if (mode === 'card') {
+                    formCard.classList.remove('hidden');
+                    formDeck.classList.add('hidden');
+                    tabCard.classList.add('bg-dark-surface2', 'text-white', 'shadow-sm');
+                    tabCard.classList.remove('text-gray-400', 'bg-transparent');
+                    tabDeck.classList.remove('bg-dark-surface2', 'text-white', 'shadow-sm');
+                    tabDeck.classList.add('text-gray-400', 'bg-transparent');
+                } else {
+                    formCard.classList.add('hidden');
+                    formDeck.classList.remove('hidden');
+                    tabCard.classList.remove('bg-dark-surface2', 'text-white', 'shadow-sm');
+                    tabCard.classList.add('text-gray-400', 'bg-transparent');
+                    tabDeck.classList.add('bg-dark-surface2', 'text-white', 'shadow-sm');
+                    tabDeck.classList.remove('text-gray-400', 'bg-transparent');
+                }
+            },
+
+            setCardType(type) {
+                document.getElementById('inp-front').dataset.cardType = type;
+                const btnBasic = document.getElementById('btn-type-basic');
+                const btnCloze = document.getElementById('btn-type-cloze');
+                const helpCloze = document.getElementById('help-cloze');
+
+                if (type === 'basic') {
+                    btnBasic.classList.add('bg-ios-blue/20', 'text-ios-blue', 'border-ios-blue/50');
+                    btnBasic.classList.remove('bg-dark-surface', 'border-dark-border', 'text-gray-400');
+                    btnCloze.classList.add('bg-dark-surface', 'border-dark-border', 'text-gray-400');
+                    btnCloze.classList.remove('bg-ios-blue/20', 'text-ios-blue', 'border-ios-blue/50');
+                    helpCloze.classList.add('hidden');
+                } else {
+                    btnCloze.classList.add('bg-ios-blue/20', 'text-ios-blue', 'border-ios-blue/50');
+                    btnCloze.classList.remove('bg-dark-surface', 'border-dark-border', 'text-gray-400');
+                    btnBasic.classList.add('bg-dark-surface', 'border-dark-border', 'text-gray-400');
+                    btnBasic.classList.remove('bg-ios-blue/20', 'text-ios-blue', 'border-ios-blue/50');
+                    helpCloze.classList.remove('hidden');
+                }
+            },
+
+            openSettings() {
+                const modal = document.getElementById('settings-modal');
+                const panel = document.getElementById('settings-panel');
+                modal.classList.remove('hidden');
+                setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+            },
+
+            closeSettings() {
+                const modal = document.getElementById('settings-modal');
+                const panel = document.getElementById('settings-panel');
+                panel.classList.add('translate-x-full');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            },
+
+            alert(title, message) {
+                const modal = document.getElementById('alert-modal');
+                document.getElementById('alert-title').textContent = title;
+                document.getElementById('alert-message').textContent = message;
+                modal.classList.remove('hidden');
+            },
+
+            closeAlert() {
+                document.getElementById('alert-modal').classList.add('hidden');
+            }
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // 7. DATA MANAGEMENT
+        // ═══════════════════════════════════════════════════════════════
+
+        const DataMgr = {
+            exportJSON() {
+                const dataStr = JSON.stringify(DB.state, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `ultra-anki-${Date.now()}.json`;
+                link.click();
+            },
+
+            importJSON() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            const imported = JSON.parse(event.target.result);
+                            DB.state = imported;
+                            DB.save();
+                            UI.alert('Muvaffaqiyat', 'Ma\'lumotlar yuklandi');
+                            Router.nav('decks');
+                        } catch (err) {
+                            UI.alert('Xato', 'Fayl noto\'g\'ri format');
+                        }
+                    };
+                    reader.readAsText(file);
+                };
+                input.click();
+            },
+
+            reset() {
+                DB.state = {
+                    user: { xp: 0, level: 1, streak: 0, lastStudy: null, heatmap: {}, totalCards: 0, totalReviews: 0 },
+                    decks: [], 
+                    cards: [],
+                    settings: { cardsPerDay: 20, language: 'uz' }
+                };
+                DB.seed();
+                UI.alert('Muvaffaqiyat', 'Barcha ma\'lumotlar qayta sozlandi');
+                Router.nav('decks');
+            }
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // 8. INITIALIZATION
+        // ═══════════════════════════════════════════════════════════════
+
+        document.addEventListener('DOMContentLoaded', () => {
+            DB.init();
+            Router.nav('decks');
+
+            // Remove keyboard shortcuts on mobile
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (!isMobile) {
+                // Keyboard shortcuts already added in study view
+            }
+
+            console.log('✅ Ultra Anki Pro v2.5.0 Initialized');
+            console.log(`📚 Total Decks: ${DB.state.decks.length}`);
+            console.log(`🎯 Total Cards: ${DB.state.cards.length}`);
+        });
+
+        // Close modals on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                UI.closeSettings();
+                UI.closeAlert();
+            }
+        });
+
+        // Handle visibility change to update streak
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                DB.checkStreak();
+            }
+        });
     </script>
+
+    <!-- FOOTER -->
+    <div class="fixed bottom-0 left-0 right-0 text-center text-[10px] text-gray-600 py-2 pointer-events-none z-0 max-w-2xl mx-auto">
+        © Muhammad Daler tomonidan yasalgan
+    </div>
+
 </body>
 </html>
